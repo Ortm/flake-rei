@@ -7,11 +7,18 @@
 }:
 let
   # Plugin helpers
-  mkPreviewer = run: name: { inherit name run; };
-  mkPreloader = run: name: {
-    inherit name run;
-    multi = false;
-  };
+  mkPreviewer =
+    run: pattern:
+    let
+      isMime = lib.hasInfix "/" pattern && !lib.hasSuffix "/" pattern;
+    in
+    {
+      inherit run;
+    }
+    // lib.optionalAttrs isMime { mime = pattern; }
+    // lib.optionalAttrs (!isMime) { url = pattern; };
+
+  mkPreloader = run: pattern: (mkPreviewer run pattern) // { multi = false; };
 
 in
 {
@@ -81,24 +88,18 @@ in
           "*.db"
           "*.duckdb"
         ])
-        ++ (map
-          (name: {
-            inherit name;
-            run = "mediainfo";
-          })
-          [
-            "{audio,video,image}/*"
-            "application/subrip"
-            "application/postscript"
-          ]
-        )
+        ++ (map (mkPreviewer "mediainfo") [
+          "{audio,video,image}/*"
+          "application/subrip"
+          "application/postscript"
+        ])
         ++ [
           {
             url = "*/";
             run = ''piper -- ${pkgs.eza}/bin/eza --tree --level=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'';
           }
           {
-            name = "*.md";
+            url = "*.md";
             run = ''
               piper -- CLICOLOR_FORCE=1 ${pkgs.glow}/bin/glow -w=$w -s=dark "$1"
             '';

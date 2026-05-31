@@ -242,6 +242,8 @@ in
 
   # global theaming if enabled
   catppuccin = {
+    enable = true;
+    autoEnable = true;
     flavor = "mocha";
     accent = "blue";
     foot.enable = false;

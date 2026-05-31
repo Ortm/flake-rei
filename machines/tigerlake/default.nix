@@ -1,6 +1,5 @@
 { pkgs, ... }:
 {
-  catppuccin.enable = true;
   programs = {
     fish.enable = true;
     foot = {
