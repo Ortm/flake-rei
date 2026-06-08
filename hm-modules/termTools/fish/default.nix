@@ -47,7 +47,7 @@ in
     functions = lib.mkMerge [
       (listToAttrs (
         lib.mapAttrsToList mkFunc {
-          md = mkFuncWrap "mkdir" "mkdir -p";
+          md = mkFuncWrap "mkdir" "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
           gm = "npx --prefer-offline --no-audit --no-fund -y @google/gemini-cli@latest";
           e = "$EDITOR";
           gd = builtins.readFile ./gd_function.fish;
