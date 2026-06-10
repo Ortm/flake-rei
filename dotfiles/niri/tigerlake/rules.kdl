@@ -36,6 +36,8 @@ window-rule {
 window-rule {
     open-on-output "HDMI-A-1"
     match app-id="foot-mini"
+    match app-id="kitty-mini"
+    match app-id="mpv"
     default-column-width { proportion 1.0; }
     open-fullscreen true
 }

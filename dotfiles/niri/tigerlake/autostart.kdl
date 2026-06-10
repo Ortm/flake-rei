@@ -12,3 +12,4 @@ spawn-sh-at-startup "flatpak run com.github.wwmm.easyeffects --gapplication-serv
 // spawn-sh-at-startup "blueberry"
 
 spawn-sh-at-startup "qs -c noctalia-shell"
+spawn-sh-at-startup "kitty --app-id=\"kitty-mini\" -o font_size=14 riptide"

@@ -14,6 +14,7 @@
       selection_foreground = "#cdd6f4";
       selection_background = "#414356";
       url_color = "#89b4fa";
+      confirm_os_window_close = 0;
 
       color0 = "#45475a";
       color1 = "#f38ba8";

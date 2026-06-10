@@ -9,6 +9,7 @@ binds {
     Mod+Shift+D { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
     Mod+I { spawn-sh "qs -c noctalia-shell ipc call controlCenter toggle"; }
     Mod+Shift+T { spawn-sh "foot -a 'foot-mini' -f 'GeistMono Nerd Font:size=23'"; }
+    Mod+M { spawn-sh "kitty --app-id=\"kitty-mini\" -o font_size=14 riptide"; }
 
     XF86AudioRaiseVolume        allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"; }
     XF86AudioLowerVolume        allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
