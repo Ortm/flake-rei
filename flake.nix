@@ -76,6 +76,9 @@
         ./hm-modules/security/keys.nix
         ./hm-modules/security/sops.nix
         ./hm-modules/security/rclone.nix
+        ./hm-modules/wayland/foot.nix
+        ./hm-modules/wayland/kitty.nix
+        ./hm-modules/wayland/ghostty.nix
 
         inputs.catppuccin.homeModules.catppuccin
         inputs.sops-nix.homeManagerModules.sops

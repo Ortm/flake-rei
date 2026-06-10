@@ -20,6 +20,7 @@ window-rule {
     match app-id=r#"(?i)minecraft"#
     match app-id=r#"^steam_app_"#
     match app-id="foot"
+    match app-id="kitty"
     match app-id="com.mitchellh.ghostty"
     match app-id="Antigravity"
     match app-id="chromiumon-demand"
