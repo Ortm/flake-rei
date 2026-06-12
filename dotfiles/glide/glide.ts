@@ -100,6 +100,20 @@ interface GlidePrefs {
 	clear(name: string): void;
 }
 
+interface CommandLineCustomOption {
+	label: string;
+	description?: string;
+	render?(): unknown;
+	matches?(props: { input: string }): boolean | null;
+	execute(props: { input: string }): void;
+}
+
+interface CommandLineShowOpts {
+	input?: string;
+	title?: string;
+	options?: CommandLineCustomOption[];
+}
+
 interface GlideAPI {
 	o: GlideOptions;
 	search_engines: GlideSearchEngines;
@@ -109,6 +123,11 @@ interface GlideAPI {
 	styles: GlideStyles;
 	addons: GlideAddons;
 	prefs: GlidePrefs;
+	commandline: {
+		show(opts?: CommandLineShowOpts): Promise<void>;
+		close(): Promise<boolean>;
+		is_active(): boolean;
+	};
 	include(path: string): void;
 }
 
@@ -134,4 +153,9 @@ glide.search_engines.add({
 	keyword: "gh",
 	search_url: "https://github.com/search?q={searchTerms}",
 	is_default: false,
+});
+
+// Keymaps
+glide.keymaps.set("normal", "<C-space>", () => {
+	glide.commandline.show({ input: "tab " });
 });
