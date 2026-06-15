@@ -95,6 +95,7 @@ in
 
       # yaml
       yaml-language-server
+      ansible-language-server
 
       # markdown
       markdown-oxide
