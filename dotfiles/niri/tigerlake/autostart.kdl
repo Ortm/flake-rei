@@ -6,7 +6,7 @@ spawn-sh-at-startup "swaybg -m center -o DP-2 -i /home/gidrex/flake-rei/assets/w
 // spawn-sh-at-startup "swww-daemon"
 // spawn-sh-at-startup "/home/gidrex/flake-rei/dotfiles/niri/bluring_wallpaper.sh"
 
-spawn-sh-at-startup "clash-verge"
+spawn-sh-at-startup "flclash"
 spawn-sh-at-startup "flatpak run com.github.wwmm.easyeffects --gapplication-service"
 // spawn-sh-at-startup "pavucontrol"
 // spawn-sh-at-startup "blueberry"
