@@ -73,7 +73,6 @@
         # My cli/tui tools
         ./hm-modules/termTools/yazi
         ./hm-modules/termTools/fish
-        ./hm-modules/termTools/nushell
         ./hm-modules/termTools/helix
         ./hm-modules/termTools/neovim
         ./hm-modules/termTools/less.nix
