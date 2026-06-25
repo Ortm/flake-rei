@@ -66,22 +66,33 @@
       # Common modules
       commonModules = [
         ./home.nix
+
+        # Sounds settings
         ./hm-modules/sound/mpv.nix
+
+        # My cli/tui tools
         ./hm-modules/termTools/yazi
         ./hm-modules/termTools/fish
         ./hm-modules/termTools/nushell
         ./hm-modules/termTools/helix
         ./hm-modules/termTools/neovim
         ./hm-modules/termTools/less.nix
+
+        # Security
+        inputs.sops-nix.homeManagerModules.sops
         ./hm-modules/security/keys.nix
         ./hm-modules/security/sops.nix
         ./hm-modules/security/rclone.nix
+
+        # Wayland apps
         ./hm-modules/wayland/foot.nix
         ./hm-modules/wayland/kitty.nix
         ./hm-modules/wayland/ghostty.nix
 
+        # Theming (Im prefer catppuccin mocha theme)
         inputs.catppuccin.homeModules.catppuccin
-        inputs.sops-nix.homeManagerModules.sops
+        ./hm-modules/themes/gtk.nix
+        ./hm-modules/themes/qt.nix
 
         { _module.args = moduleArgs; }
       ];

@@ -189,12 +189,6 @@ in
     };
   };
 
-  qt = {
-    platformTheme.name = mkIf config.catppuccin.enable "kvantum";
-    style.name = "kvantum";
-    style.package = pkgs.libsForQt5.qtstyleplugins;
-  };
-
   fonts.fontconfig.enable = true;
 
   home = {
