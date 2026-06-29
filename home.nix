@@ -282,6 +282,7 @@ in
       "${config.home.homeDirectory}/.opencode/bin"
       "/usr/bin"
       "/opt/flutter/bin"
+      "/opt/android-sdk/tools/bin"
     ];
 
     username = "${username}";
