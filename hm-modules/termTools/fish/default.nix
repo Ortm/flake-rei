@@ -82,17 +82,13 @@ in
       ))
 
       (lib.mkIf config.programs.home-manager.enable (
-        listToAttrs (
-          lib.mapAttrsToList mkFunc { hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE"; }
-        )
+        listToAttrs (lib.mapAttrsToList mkFunc { hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE"; })
       ))
 
       # Dots
       (listToAttrs (
         map (
-          dots:
-          mkFunc (concatStringsSep "" (genList (_: ".") dots))
-            "cd ${concatStringsSep "/" (genList (_: "..") (dots - 1))}"
+          dots: mkFunc (concatStringsSep "" (genList (_: ".") dots)) "cd ${concatStringsSep "/" (genList (_: "..") (dots - 1))}"
         ) (genList (i: i + 2) 5)
       ))
     ];
@@ -114,9 +110,7 @@ in
 
     completions = {
       gd = builtins.readFile ./gd_completion.fish;
-      rip = builtins.readFile (
-        pkgs.runCommand "rip-completions" { } "${pkgs.rip2}/bin/rip completions fish > $out"
-      );
+      rip = builtins.readFile (pkgs.runCommand "rip-completions" { } "${pkgs.rip2}/bin/rip completions fish > $out");
     };
   };
 

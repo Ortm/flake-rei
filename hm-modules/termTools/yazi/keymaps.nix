@@ -26,9 +26,10 @@ in
     (mkBind [ "g" "t" ] "cd ~/gdrive/" "Go to rclone gdrive mount")
 
     # File operations
-    (mkBind [ "e" "D" ] ''shell '${ripdrag} "$@" -x 2>/dev/null &' --confirm''
-      "Drag & Drop file with list of selected files"
-    )
+    (mkBind [
+      "e"
+      "D"
+    ] ''shell '${ripdrag} "$@" -x 2>/dev/null &' --confirm'' "Drag & Drop file with list of selected files")
     (mkBind [
       "e"
       "d"

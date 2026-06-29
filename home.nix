@@ -15,8 +15,7 @@ let
   inherit (builtins) pathExists substring stringLength;
 
   username = "gidrex";
-  Username =
-    toUpper (substring 0 1 username) + toLower (substring 1 (stringLength username - 1) username); # gidrex -> Gidrex
+  Username = toUpper (substring 0 1 username) + toLower (substring 1 (stringLength username - 1) username); # gidrex -> Gidrex
   name = "Alexander";
   mail = "Desench@proton.me";
 

@@ -145,7 +145,13 @@ in
       {
         name = "nix";
         auto-format = true;
-        formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
+        formatter = {
+          command = "${pkgs.nixfmt}/bin/nixfmt";
+          args = [
+            "--width"
+            "120"
+          ];
+        };
       }
       {
         name = "rust";

@@ -44,9 +44,7 @@
               || baseName == "README"
               || nixpkgs.lib.hasInfix "LICENSE" baseName # exclude this files
               || (
-                type == "directory"
-                && builtins.pathExists path
-                && builtins.length (builtins.attrNames (builtins.readDir path)) == 0
+                type == "directory" && builtins.pathExists path && builtins.length (builtins.attrNames (builtins.readDir path)) == 0
               )
             ); # empty dirs
         };

@@ -12,10 +12,10 @@
   };
 
   # Symlink GTK4 theme files so GTK4/Libadwaita applications respect the theme
-  xdg.configFile = {
-    "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
-    "gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
-    "gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
+  xdg.configFile = with config.gtk.theme; {
+    "gtk-4.0/assets".source = "${package}/share/themes/${name}/gtk-4.0/assets";
+    "gtk-4.0/gtk.css".source = "${package}/share/themes/${name}/gtk-4.0/gtk.css";
+    "gtk-4.0/gtk-dark.css".source = "${package}/share/themes/${name}/gtk-4.0/gtk-dark.css";
   };
 
   dconf.settings = {

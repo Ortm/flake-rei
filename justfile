@@ -7,7 +7,7 @@
 # QA: Nix, Niri
 @qa:
     ! command -v niri > /dev/null || niri validate
-    ! command -v nixfmt > /dev/null || (command -v fd > /dev/null && fd -e nix -X nixfmt || find . -name "*.nix" -exec nixfmt -c {} +)
+    ! command -v nixfmt > /dev/null || (command -v fd > /dev/null && fd -e nix -X nixfmt --width 120 || find . -name "*.nix" -exec nixfmt -c --width 120 {} +)
 
 # Rebuild hm with change generation
 hm:
