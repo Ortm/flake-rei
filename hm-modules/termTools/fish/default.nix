@@ -50,6 +50,7 @@ in
           md = mkFuncWrap "mkdir" "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
           e = "$EDITOR";
           gd = builtins.readFile ./gd_function.fish;
+          hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup";
         }
       ))
 
@@ -80,11 +81,7 @@ in
         listToAttrs (lib.mapAttrsToList mkFunc { n = mkFuncWrap "nvim" "${pkgs.neovim}/bin/nvim"; })
       ))
 
-      (lib.mkIf config.programs.home-manager.enable (
-        listToAttrs (lib.mapAttrsToList mkFunc { hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE"; })
-      ))
-
-      # Dots
+      # Dots: ".. == cd ../", "... == cd ../../", ...
       (listToAttrs (
         map (
           dots: mkFunc (concatStringsSep "" (genList (_: ".") dots)) "cd ${concatStringsSep "/" (genList (_: "..") (dots - 1))}"

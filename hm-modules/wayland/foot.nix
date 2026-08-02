@@ -8,6 +8,8 @@ let
   inherit (lib) mkIf;
 in
 {
+  xdg.configFile."foot/foot.ini".force = true;
+
   programs.foot.settings = {
     main = {
       shell = mkIf config.programs.fish.enable "${pkgs.fish}/bin/fish";

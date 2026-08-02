@@ -11,7 +11,7 @@
 
 # Rebuild hm with change generation
 hm:
-    home-manager switch --flake ./#$FLAKE_MACHINE
+    home-manager switch --flake ./#$FLAKE_MACHINE -b backup
 
 # Generate blurred versions of wallpapers in each directory (parallel processing)
 blur-wallpapers:
