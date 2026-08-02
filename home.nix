@@ -264,6 +264,7 @@ in
 
         SHELL = mkIf config.programs.fish.enable "fish";
         TERM = mkIf config.programs.foot.enable "foot";
+        ANDROID_HOME = "${config.home.homeDirectory}/Android/Sdk";
 
         QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
 
@@ -272,17 +273,24 @@ in
       };
 
     sessionPath = [
-      "${config.home.homeDirectory}/.volta/bin"
-      "${config.home.homeDirectory}/.cargo/bin"
-      "${config.home.homeDirectory}/go/bin"
       "${config.home.homeDirectory}/.local/bin"
       "${config.home.homeDirectory}/.nix-profile/bin"
-      "${config.home.homeDirectory}/.npm-global/bin"
-      "${config.home.homeDirectory}/.deno/bin"
       "${config.home.homeDirectory}/.opencode/bin"
       "/usr/bin"
+
+      # Packet managers
+      "${config.home.homeDirectory}/.volta/bin"
+      "${config.home.homeDirectory}/.cargo/bin"
+      "${config.home.homeDirectory}/.npm-global/bin"
+      "${config.home.homeDirectory}/.deno/bin"
+      "${config.home.homeDirectory}/go/bin"
+
+      # Flutter dev
       "/opt/flutter/bin"
       "/opt/android-sdk/tools/bin"
+      "$ANDROID_HOME/cmdline-tools/latest/bin"
+      "$ANDROID_HOME/platform-tools"
+      "$ANDROID_HOME/emulator"
     ];
 
     username = "${username}";
