@@ -288,9 +288,9 @@ in
       # Flutter dev
       "/opt/flutter/bin"
       "/opt/android-sdk/tools/bin"
-      "$ANDROID_HOME/cmdline-tools/latest/bin"
-      "$ANDROID_HOME/platform-tools"
-      "$ANDROID_HOME/emulator"
+      "${config.home.homeDirectory}/Android/Sdk/cmdline-tools/latest/bin"
+      "${config.home.homeDirectory}/Android/Sdk/platform-tools"
+      "${config.home.homeDirectory}/Android/Sdk/emulator"
     ];
 
     username = "${username}";
