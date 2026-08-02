@@ -265,6 +265,7 @@ in
         SHELL = mkIf config.programs.fish.enable "fish";
         TERM = mkIf config.programs.foot.enable "foot";
         ANDROID_HOME = "${config.home.homeDirectory}/Android/Sdk";
+        ANDROID_AVD_HOME = "${config.home.homeDirectory}/.android/avd";
 
         QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
 
