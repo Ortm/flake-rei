@@ -7,7 +7,7 @@ window-rule {
 // Enable VRR
 window-rule {
     variable-refresh-rate true
-    match app-id="^mpv$"
+    // match app-id="^mpv$"
     match app-id=r#"^steam_app_"#
     match app-id=r#"(?i)Minecraft"#
 }
