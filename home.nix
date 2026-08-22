@@ -277,6 +277,7 @@ in
       "${config.home.homeDirectory}/.local/bin"
       "${config.home.homeDirectory}/.nix-profile/bin"
       "${config.home.homeDirectory}/.opencode/bin"
+      "${config.home.homeDirectory}/.kimi-code/bin"
       "/usr/bin"
 
       # Packet managers
