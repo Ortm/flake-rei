@@ -39,9 +39,10 @@ in
     (mkBind [ "e" "g" ] "shell --block 'glow -t \"$@\"'" "Open file with glow")
 
     (mkBind [ "u" ] "plugin restore" "Restore last deleted files/folders")
+    (mkBind [ "U" ] "plugin restore -- --interactive" "Restore deleted files/folders (Interactive)")
     (mkBind [ "c" "m" ] "plugin chmod" "Chmod on selected files")
     (mkBind "O" "plugin open-with-cmd block" "Open with command in the terminal")
-    (mkBind [ "<C-c>" ] "plugin close-and-restore-tab close_to_right" "Close current tab")
+    (mkBind [ "t" "c" ] "close" "Close current tab")
     (mkBind [ "<C-t>" ] "plugin close-and-restore-tab restore" "Restore closed tab")
 
     # UI controls

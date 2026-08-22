@@ -123,6 +123,10 @@ in
       })
 
       require("full-border"):setup { type = ui.Border.ROUNDED }
+      require("close-and-restore-tab"):setup()
+      require("restore"):setup({
+        show_confirm = false,
+      })
     '';
   };
 
