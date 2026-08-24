@@ -60,51 +60,25 @@ in
         2
         5
       ];
-      plugin.prepend_preloaders =
-        (map (mkPreloader "duckdb") [
-          "*.csv"
-          "*.tsv"
-          "*.json"
-          "*.parquet"
-          "*.txt"
-          "*.xlsx"
-        ])
-        # preview for images, video, audio
-        ++ (map (mkPreloader "mediainfo") [
-          "{audio,video,image}/*"
-          "application/subrip"
-          "application/postscript"
-        ]);
+      plugin.prepend_preloaders = [
+        (mkPreloader "duckdb" "*.{csv,tsv,json,parquet,txt,xlsx}")
+        (mkPreloader "mediainfo" "{audio/*,video/*,image/*,application/subrip,application/postscript}")
+      ];
 
-      plugin.prepend_previewers =
-        # preview with render fancy tables
-        (map (mkPreviewer "duckdb") [
-          "*.csv"
-          "*.tsv"
-          "*.json"
-          "*.parquet"
-          "*.txt"
-          "*.xlsx"
-          "*.db"
-          "*.duckdb"
-        ])
-        ++ (map (mkPreviewer "mediainfo") [
-          "{audio,video,image}/*"
-          "application/subrip"
-          "application/postscript"
-        ])
-        ++ [
-          {
-            url = "*/";
-            run = ''piper -- ${pkgs.eza}/bin/eza --tree --level=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'';
-          }
-          {
-            url = "*.md";
-            run = ''
-              piper -- CLICOLOR_FORCE=1 ${pkgs.glow}/bin/glow -w=$w -s=dark "$1"
-            '';
-          }
-        ];
+      plugin.prepend_previewers = [
+        (mkPreviewer "duckdb" "*.{csv,tsv,json,parquet,txt,xlsx,db,duckdb}")
+        (mkPreviewer "mediainfo" "{audio/*,video/*,image/*,application/subrip,application/postscript}")
+        {
+          url = "*/";
+          run = ''piper -- ${pkgs.eza}/bin/eza --tree --level=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'';
+        }
+        {
+          url = "*.md";
+          run = ''
+            piper -- CLICOLOR_FORCE=1 ${pkgs.glow}/bin/glow -w=$w -s=dark "$1"
+          '';
+        }
+      ];
       tasks.image_alloc = 1073741824; # 1 Gb
     };
 
@@ -130,11 +104,6 @@ in
     '';
   };
 
-  xdg.configFile."yazi/vfs.toml".text = ''
-    [services.cloud]
-    type = "rclone"
-    remote = "gdisk"
-  '';
 }
 # Doc
 # https://github.com/wylie102/duckdb.yazi
