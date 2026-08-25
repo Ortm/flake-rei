@@ -26,17 +26,9 @@ in
     (mkBind [ "g" "t" ] "cd ~/gdrive/" "Go to rclone gdrive mount")
 
     # File operations
-    (mkBind [
-      "e"
-      "D"
-    ] ''shell '${ripdrag} "$@" -x 2>/dev/null &' --confirm'' "Drag & Drop file with list of selected files")
-    (mkBind [
-      "e"
-      "d"
-    ] ''shell '${ripdrag} "$@" -A 2>/dev/null &' --confirm'' "Drag & Drop file all select files as one")
-    (mkBind [ "e" "o" ] "shell 'onlyoffice-desktopeditors \"$@\"'" "Open file in onlyoffice")
-    (mkBind [ "e" "l" ] "shell 'libreoffice \"$@\"'" "Open file in libreoffice")
-    (mkBind [ "e" "g" ] "shell --block 'glow -t \"$@\"'" "Open file with glow")
+    (mkBind [ "e" "D" ] "shell --orphan -- ${ripdrag} -a -x %s" "Drag & Drop file with list of selected files")
+    (mkBind [ "e" "d" ] "shell --orphan -- ${ripdrag} -A -x %s" "Drag & Drop file all select files as one")
+    (mkBind [ "e" "g" ] "shell --block -- glow -t %s" "Open file with glow")
 
     (mkBind [ "u" ] "plugin restore" "Restore last deleted files/folders")
     (mkBind [ "U" ] "plugin restore -- --interactive" "Restore deleted files/folders (Interactive)")
