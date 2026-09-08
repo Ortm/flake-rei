@@ -29,6 +29,8 @@ binds {
     Mod+F { set-column-width "100%"; }
 
     // Monitor navigation
-    Mod+R { focus-monitor-next; }
-    Mod+Shift+R { move-column-to-monitor-next; }
+    Mod+R { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh focus HDMI-A-1"; }
+    Mod+Y { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh focus eDP-1"; }
+    Mod+Shift+R { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh move HDMI-A-1"; }
+    Mod+Shift+Y { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh move eDP-1"; }
 }

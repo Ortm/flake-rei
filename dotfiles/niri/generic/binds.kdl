@@ -21,7 +21,7 @@ binds {
     Mod+S { screenshot; }
     Mod+Shift+S { screenshot-window show-pointer=false write-to-disk=false; }
     Mod+Ctrl+S { screenshot-window show-pointer=false write-to-disk=true; }
-    Mod+Y { spawn-sh "hyprpicker | wl-copy"; }
+    Mod+Ctrl+Y { spawn-sh "hyprpicker | wl-copy"; }
     Mod+Ctrl+V { spawn-sh "cliphist wipe"; }
 
     Mod+Up {  focus-window-up; }
