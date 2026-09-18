@@ -4,10 +4,10 @@ binds {
     Mod+V { spawn-sh "cliphist list | wofi --conf /home/gidrex/flake-rei/dotfiles/wofi/tigerlake_config --style /home/gidrex/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
 
     
-    Mod+D { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
-    Mod+P { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
-    Mod+Shift+D { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
-    Mod+I { spawn-sh "qs -c noctalia-shell ipc call controlCenter toggle"; }
+    Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
+    Mod+Shift+D { spawn-sh "noctalia msg session lock"; }
+    Mod+I { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Shift+T { spawn-sh "foot -a 'foot-mini' -f 'GeistMono Nerd Font:size=23'"; }
     Mod+M { spawn-sh "kitty --app-id=\"kitty-mini\" -o font_size=14 riptide"; }
 
