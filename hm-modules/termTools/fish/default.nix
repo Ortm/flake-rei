@@ -48,6 +48,7 @@ in
       (listToAttrs (
         lib.mapAttrsToList mkFunc {
           md = mkFuncWrap "mkdir" "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
+          y = builtins.readFile ./y_function.fish;
           e = "$EDITOR";
           gd = builtins.readFile ./gd_function.fish;
           hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup";
@@ -99,8 +100,6 @@ in
       ${lib.optionalString config.programs.yazi.enable "bind -M insert \\ey 'commandline -f cancel; ${pkgs.yazi}/bin/yazi; commandline -f repaint'"}
       ${lib.optionalString config.programs.lazygit.enable "bind -M insert \\ex 'commandline -f cancel; ${pkgs.lazygit}/bin/lazygit; commandline -f repaint'"}
       bind -M insert \ea 'commandline -f cancel; agy --dangerously-skip-permissions; commandline -f repaint'
-
-      tuna completion fish | source
     '';
 
     loginShellInit = "tide configure --auto --style=Classic --prompt_colors='16 colors' --show_time=No --classic_prompt_separators=Round --powerline_prompt_heads=Round --powerline_prompt_tails=Round --powerline_prompt_style='Two lines, character' --prompt_connection=Dotted --powerline_right_prompt_frame=No --prompt_spacing=Sparse --icons='Many icons' --transient=Yes";

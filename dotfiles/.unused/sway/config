@@ -4,7 +4,7 @@
 
 set $alt		    Mod1
 set $super		  Mod4
-set $HOME		    /home/gidrex
+set $HOME		    /home/vix
 set $XDG		    XDG_PICTURES_DIR=$HOME/Pictures XDG_DOWNLOAD_DIR=$HOME/Downloads XDG_RUNTIME_DIR=/tmp/swaytmp
 
 set $browser		    /home/$USER/.local/share/AppImage/ZenBrowser.AppImage

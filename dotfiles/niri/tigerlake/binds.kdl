@@ -1,7 +1,7 @@
 binds {
-	// Mod+P { spawn-sh "/home/gidrex/flake-rei/scripts/power-menu.sh"; }
- //    Mod+D { spawn "wofi" "--config /home/gidrex/flake-rei/dotfiles/wofi/tigerlake_config" "--style /home/gidrex/flake-rei/dotfiles/wofi/style.css" "--show drun"; }
-    Mod+V { spawn-sh "cliphist list | wofi --conf /home/gidrex/flake-rei/dotfiles/wofi/tigerlake_config --style /home/gidrex/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
+	// Mod+P { spawn-sh "/home/vix/flake-rei/scripts/power-menu.sh"; }
+ //    Mod+D { spawn "wofi" "--config /home/vix/flake-rei/dotfiles/wofi/tigerlake_config" "--style /home/vix/flake-rei/dotfiles/wofi/style.css" "--show drun"; }
+    Mod+V { spawn-sh "cliphist list | wofi --conf /home/vix/flake-rei/dotfiles/wofi/tigerlake_config --style /home/vix/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
 
     
     Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; }
@@ -29,8 +29,8 @@ binds {
     Mod+F { set-column-width "100%"; }
 
     // Monitor navigation
-    Mod+R { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh focus HDMI-A-1"; }
-    Mod+Y { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh focus eDP-1"; }
-    Mod+Shift+R { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh move HDMI-A-1"; }
-    Mod+Shift+Y { spawn-sh "/home/gidrex/flake-rei/scripts/toggle_output.sh move eDP-1"; }
+    Mod+R { spawn-sh "/home/vix/flake-rei/scripts/toggle_output.sh focus HDMI-A-1"; }
+    Mod+Y { spawn-sh "/home/vix/flake-rei/scripts/toggle_output.sh focus eDP-1"; }
+    Mod+Shift+R { spawn-sh "/home/vix/flake-rei/scripts/toggle_output.sh move HDMI-A-1"; }
+    Mod+Shift+Y { spawn-sh "/home/vix/flake-rei/scripts/toggle_output.sh move eDP-1"; }
 }

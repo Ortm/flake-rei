@@ -31,7 +31,7 @@ in
     ];
 
   programs.yazi = {
-    shellWrapperName = "y";
+    #shellWrapperName = "y";
 
     # Plugins init
     plugins = {

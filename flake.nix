@@ -56,7 +56,7 @@
           inherit (inputs) open-with-cmd close-and-restore-tab;
         };
         # tigerlake
-        rei-sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkcwdevqLSxMqKZEo94A4w2VRgeSRCZm5j+hM0pafDf gidrex@rei";
+        rei-sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkcwdevqLSxMqKZEo94A4w2VRgeSRCZm5j+hM0pafDf vix@rei";
         # icelake
         shou-sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHgmd6mBmIKY5akqKrnTkaJZjKcrCeVIsHOxZW6Xotir Desench@proton.me";
       };

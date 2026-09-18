@@ -1,7 +1,7 @@
 input {
 	keyboard {
 		xkb {
-			file "/home/gidrex/flake-rei/dotfiles/niri/tigerlake/keymap.xkb"
+			file "/home/vix/flake-rei/dotfiles/niri/tigerlake/keymap.xkb"
 		}
 	}
 	touchpad {

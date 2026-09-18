@@ -1,9 +1,9 @@
 binds {
-    Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+SPACE { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
     Mod+Shift+D { spawn-sh "noctalia msg session lock"; }
     Mod+I { spawn-sh "noctalia msg panel-toggle control-center"; }
-    Mod+V { spawn-sh "cliphist list | wofi --conf /home/gidrex/flake-rei/dotfiles/wofi/icelake_config --style /home/gidrex/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
+    Mod+V { spawn-sh "cliphist list | wofi --conf /home/vix/flake-rei/dotfiles/wofi/icelake_config --style /home/vix/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
 
     XF86AudioRaiseVolume   allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
     XF86AudioLowerVolume   allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }

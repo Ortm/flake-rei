@@ -1,6 +1,6 @@
 binds {
     Mod+T { spawn "foot"; }
-    Mod+X { spawn-sh "/home/gidrex/flake-rei/scripts/OCR_select_area.sh"; }
+    Mod+X { spawn-sh "/home/vix/flake-rei/scripts/OCR_select_area.sh"; }
 
     Mod+B { toggle-window-floating; }
     Mod+Q { close-window; }
