@@ -25,10 +25,11 @@ nix run --experimental-features "flakes nix-command" home-manager/master -- swit
 
 ```sh
 export FLAKE_MACHINE=<machine name>
-mkdir -p ~/.config/niri
-ln -sf ~/flake-rei/dotfiles/niri/config_"$FLAKE_MACHINE".kdl ~/.config/niri/config.kdl
-ln -sf ~/flake-rei/dotfiles/niri/{generic/,"$FLAKE_MACHINE"/} ~/.config/niri/
+~/flake-rei/scripts/setup_niri.sh
 ```
+
+If `~/.config/niri` already exists, the script moves it to a timestamped backup
+(`~/.config/niri.bak.YYYYMMDD-HHMMSS`) before linking the new config.
 
 ## Setup rclone for Google Drive
 1) configure rclone with alias/name "gdrive"
