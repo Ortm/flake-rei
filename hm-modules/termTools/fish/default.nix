@@ -50,7 +50,6 @@ in
           md = mkFuncWrap "mkdir" "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
           y = builtins.readFile ./y_function.fish;
           e = "$EDITOR";
-          gd = builtins.readFile ./gd_function.fish;
           hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup";
         }
       ))
@@ -105,7 +104,6 @@ in
     loginShellInit = "tide configure --auto --style=Classic --prompt_colors='16 colors' --show_time=No --classic_prompt_separators=Round --powerline_prompt_heads=Round --powerline_prompt_tails=Round --powerline_prompt_style='Two lines, character' --prompt_connection=Dotted --powerline_right_prompt_frame=No --prompt_spacing=Sparse --icons='Many icons' --transient=Yes";
 
     completions = {
-      gd = builtins.readFile ./gd_completion.fish;
       rip = builtins.readFile (pkgs.runCommand "rip-completions" { } "${pkgs.rip2}/bin/rip completions fish > $out");
     };
   };
@@ -114,7 +112,7 @@ in
 
   programs = {
     zoxide.enableFishIntegration = true;
-    yazi.enableFishIntegration = true;
+    yazi.enableFishIntegration = false;
     eza.enableFishIntegration = false;
   };
 }

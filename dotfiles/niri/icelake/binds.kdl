@@ -1,8 +1,5 @@
 binds {
-    Mod+SPACE { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
-    Mod+Shift+D { spawn-sh "noctalia msg session lock"; }
-    Mod+I { spawn-sh "noctalia msg panel-toggle control-center"; }
+
     Mod+V { spawn-sh "cliphist list | wofi --conf /home/vix/flake-rei/dotfiles/wofi/icelake_config --style /home/vix/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
 
     XF86AudioRaiseVolume   allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
@@ -17,8 +14,7 @@ binds {
     XF86MonBrightnessDown  allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
 
     // Default layout
-    Mod+W { set-column-width "45%"; }
-    Mod+A { set-column-width "60%"; }
-    Mod+G { set-column-width "90%"; }
     Mod+F { set-column-width "100%"; }
+    Mod+G { set-column-width "90%"; }
+    Mod+H { set-column-width "45%"; }
 }

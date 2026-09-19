@@ -1,2 +1,0 @@
-spawn-sh-at-startup "noctalia"
-spawn-sh-at-startup "wl-paste --watch cliphist store"

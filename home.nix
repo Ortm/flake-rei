@@ -35,8 +35,13 @@ in
     home-manager.enable = true;
     nix-your-shell.enable = true;
     fish.enable = true;
+    foot = {
+      enable = true;
+      settings.main.font = "GeistMonoNerdFontMono:size=9";
+    };
     helix.enable = true;
     neovim.enable = true;
+    opencode.enable = true;
 
     yazi = {
       enable = true;
@@ -195,8 +200,6 @@ in
       with pkgs;
       [
         # utility
-        sops
-        age
         unrar
         nix-prefetch-github
         rip2
@@ -231,10 +234,6 @@ in
 
         # ml
         easyocr
-
-        # security
-        age
-        ssh-to-age
 
         # fonts
       ]

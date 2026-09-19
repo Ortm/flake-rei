@@ -23,8 +23,6 @@ let
 in
 {
   programs.yazi.keymap.mgr.prepend_keymap = [
-    (mkBind [ "g" "t" ] "cd ~/gdrive/" "Go to rclone gdrive mount")
-
     # File operations
     (mkBind [ "e" "D" ] "shell --orphan -- ${ripdrag} -a -x %s" "Drag & Drop file with list of selected files")
     (mkBind [ "e" "d" ] "shell --orphan -- ${ripdrag} -A -x %s" "Drag & Drop file all select files as one")

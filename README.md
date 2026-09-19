@@ -1,6 +1,5 @@
 # Machines
 
-- `tigerlake` - my laptop-doc station with tigerlake arch
 - `icelake` - my laptop with icelake arch
  
 ## Nix installing on non-NixOS systems
@@ -18,9 +17,8 @@ git clone git@gitlab.com:vix/flake-rei.git ~/flake-rei
 nix run --experimental-features "flakes nix-command" home-manager/master -- switch --flake ~/flake-rei/#"$FLAKE_MACHINE" --experimental-features "nix-command flakes"
 ```
 
-## Setup niri config are avaible for 2 machines:
+## Setup niri config:
 
-- tigerlake
 - icelake
 
 ```sh
@@ -30,21 +28,3 @@ export FLAKE_MACHINE=<machine name>
 
 If `~/.config/niri` already exists, the script moves it to a timestamped backup
 (`~/.config/niri.bak.YYYYMMDD-HHMMSS`) before linking the new config.
-
-## Setup rclone for Google Drive
-1) configure rclone with alias/name "gdrive"
-```sh
-rclone config 
-```
-2)
-```sh
-rclone mount gdrive: ~/gdrive \
-  --vfs-cache-mode full \
-  --vfs-cache-max-size 10G \
-  --vfs-cache-max-age 24h \
-  --dir-cache-time 1h \
-  --poll-interval 15s \
-  --vfs-read-chunk-size 32M \
-  --vfs-read-chunk-size-limit 2G \
-  --daemon
-```

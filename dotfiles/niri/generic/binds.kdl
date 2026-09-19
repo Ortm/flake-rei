@@ -1,28 +1,34 @@
 binds {
-    Mod+T { spawn "foot"; }
-    Mod+X { spawn-sh "/home/vix/flake-rei/scripts/OCR_select_area.sh"; }
-
-    Mod+B { toggle-window-floating; }
+    Mod+Return { spawn "foot"; }
+    Mod+SPACE { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+X { spawn-sh "/home/vix/flake-rei/scripts/OCR_select_area.sh"; } // TODO: поставить модельку попизже
+    
     Mod+Q { close-window; }
-    Mod+E { fullscreen-window; }
+    Mod+F { fullscreen-window; }
     Mod+Tab { toggle-overview; }
 
-    Mod+Shift+E { quit; }
-    Mod+Shift+P { power-off-monitors; }
-    Mod+Shift+Ctrl+T { toggle-debug-tint; }
+    Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
+    Mod+Shift+P { spawn-sh "noctalia msg session lock"; }
+    Mod+I { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Shift+I { power-off-monitors; }
+    // Mod+Shift+E { quit; }
+    // Mod+Shift+Ctrl+T { toggle-debug-tint; }
 
-    Mod+Equal          allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"; }
-    Mod+Minus          allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
-    Mod+0              allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    Mod+Shift+Equal    allow-when-locked=true { spawn-sh "playerctl next"; }
-    Mod+Shift+Minus    allow-when-locked=true { spawn-sh "playerctl previous"; }
-    Mod+Delete         allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    Mod+Equal               allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"; }
+    Mod+Minus               allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
+    Mod+0                   allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    Mod+Shift+Equal         allow-when-locked=true { spawn-sh "playerctl next"; }
+    // Mod+WheelScrollRight    allow-when-locked=true { spawn-sh "playerctl next"; }
+    Mod+Shift+Minus         allow-when-locked=true { spawn-sh "playerctl previous"; }
+    // Mod+WheelScrollLeft     allow-when-locked=true { spawn-sh "playerctl previous"; }
+    Mod+Backspace              allow-when-locked=true { spawn-sh "playerctl play-pause"; }
 
     Mod+S { screenshot; }
     Mod+Shift+S { screenshot-window show-pointer=false write-to-disk=false; }
     Mod+Ctrl+S { screenshot-window show-pointer=false write-to-disk=true; }
-    Mod+Ctrl+Y { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+Ctrl+V { spawn-sh "cliphist wipe"; }
+    // Mod+Ctrl+Y { spawn-sh "hyprpicker | wl-copy"; }
+    Mod+V { spawn-sh "cliphist list | wofi --conf /home/vix/flake-rei/dotfiles/wofi/icelake_config --style /home/vix/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
+    Mod+Ctrl+V { spawn-sh "cliphist wipe"; } // TODO: replace with faster one
 
     Mod+Up {  focus-window-up; }
     Mod+Down {  focus-window-down; }
@@ -33,6 +39,11 @@ binds {
     Mod+J {  focus-window-down; }
     Mod+H { focus-column-left; }
     Mod+L { focus-column-right; }
+
+    Mod+WheelScrollDown cooldown-ms=50 { focus-workspace-down; }
+    Mod+WheelScrollUp cooldown-ms=50 { focus-workspace-up; }
+    Mod+WheelScrollRight cooldown-ms=50 { focus-column-right; }
+    Mod+WheelScrollLeft cooldown-ms=50 { focus-column-left; }
 
     Mod+Shift+Up { move-window-up; }
     Mod+Shift+Down { move-window-down; }

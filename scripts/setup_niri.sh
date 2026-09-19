@@ -3,12 +3,12 @@ set -euo pipefail
 
 # Symlink niri config for the current machine.
 # Usage:
-#   export FLAKE_MACHINE=<machine name>  # icelake | tigerlake
+#   export FLAKE_MACHINE=icelake
 #   ./scripts/setup_niri.sh
 
 if [ -z "${FLAKE_MACHINE:-}" ]; then
     echo "Error: FLAKE_MACHINE environment variable not set." >&2
-    echo 'Run: export FLAKE_MACHINE=<machine name>  # icelake | tigerlake' >&2
+    echo 'Run: export FLAKE_MACHINE=icelake' >&2
     exit 1
 fi
 

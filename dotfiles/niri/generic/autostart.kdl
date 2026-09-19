@@ -1,3 +1,6 @@
 spawn-sh-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
+spawn-sh-at-startup "noctalia"
 
 spawn-sh-at-startup "wl-paste --watch cliphist store"
+spawn-sh-at-startup "telegram"
+spawn-sh-at-startup "discord"

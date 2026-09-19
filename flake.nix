@@ -11,9 +11,6 @@
     catppuccin.url = "github:catppuccin/nix";
     catppuccin.inputs.nixpkgs.follows = "nixpkgs";
 
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
     # Yazi plugins
     open-with-cmd.url = "github:Ape/open-with-cmd.yazi";
     open-with-cmd.flake = false;
@@ -51,14 +48,9 @@
 
       # Module arguments
       moduleArgs = {
-        # inherit (inputs) catppuccin-foot;
         yazi-plugins = builtins.mapAttrs (_: cleanPlugin) {
           inherit (inputs) open-with-cmd close-and-restore-tab;
         };
-        # tigerlake
-        rei-sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkcwdevqLSxMqKZEo94A4w2VRgeSRCZm5j+hM0pafDf vix@rei";
-        # icelake
-        shou-sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHgmd6mBmIKY5akqKrnTkaJZjKcrCeVIsHOxZW6Xotir Desench@proton.me";
       };
 
       # Common modules
@@ -76,10 +68,7 @@
         ./hm-modules/termTools/less.nix
 
         # Security
-        inputs.sops-nix.homeManagerModules.sops
         ./hm-modules/security/keys.nix
-        ./hm-modules/security/sops.nix
-        ./hm-modules/security/rclone.nix
 
         # Wayland apps
         ./hm-modules/wayland/foot.nix
@@ -111,7 +100,6 @@
       # Machine configurations
       machines = {
         icelake = ./machines/icelake;
-        tigerlake = ./machines/tigerlake;
       };
 
     in

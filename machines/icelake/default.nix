@@ -1,15 +1,4 @@
 { ... }:
 {
-  programs = {
-    fish.enable = true;
-    foot = {
-      enable = true;
-      settings.main.font = "GeistMonoNerdFontMono:size=9";
-    };
-  };
-
-  # home.packages = with pkgs; [ ];
-
   home.sessionVariables.FLAKE_MACHINE = "icelake";
-  home.stateVersion = "26.05";
 }
