@@ -13,7 +13,7 @@ sudo systemctl enable --now nix-daemon.socket nix-daemon.service
 ### First system-build with home-manager
 ```sh
 export FLAKE_MACHINE=<machine name>
-git clone git@github.com:Ortm/flake-rei.git ~/flake-rei
+git clone https://github.com/Ortm/flake-rei.git ~/flake-rei
 nix run --experimental-features "flakes nix-command" home-manager/master -- switch --flake ~/flake-rei/#"$FLAKE_MACHINE" --experimental-features "nix-command flakes"
 ```
 
