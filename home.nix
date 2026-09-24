@@ -43,6 +43,11 @@ in
     neovim.enable = true;
     opencode.enable = true;
 
+    hermes-agent = {
+      enable = true;
+      desktop.enable = true;
+    };
+
     yazi = {
       enable = true;
       package = pkgs.yazi;
@@ -267,6 +272,7 @@ in
         ANDROID_AVD_HOME = "${config.home.homeDirectory}/.android/avd";
 
         QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
+        NIXOS_OZONE_WL = 1;
 
         XDG_CONFIG_HOME = "${config.xdg.configHome}";
         XDG_SCREENSHOTS_DIR = "${config.home.homeDirectory}/Pictures/screenshots";

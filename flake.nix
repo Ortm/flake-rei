@@ -7,6 +7,9 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
 
+    # Hermes agent and desktop app (local)
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+
     # Theming
     catppuccin.url = "github:catppuccin/nix";
     catppuccin.inputs.nixpkgs.follows = "nixpkgs";
@@ -74,6 +77,9 @@
         ./hm-modules/wayland/foot.nix
         ./hm-modules/wayland/kitty.nix
         ./hm-modules/wayland/ghostty.nix
+
+        # Hermes agent + desktop app
+        inputs.hermes-agent.homeManagerModules.default
 
         # Theming (Im prefer catppuccin mocha theme)
         inputs.catppuccin.homeModules.catppuccin

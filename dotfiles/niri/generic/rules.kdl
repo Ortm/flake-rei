@@ -78,6 +78,7 @@ window-rule {
 layer-rule {
     block-out-from "screencast"
     match namespace="^notifications$"
+    match namespace="^noctalia-notification$"
 }
 
 window-rule {
@@ -112,7 +113,7 @@ window-rule {
     match app-id=r#".*telegram.*"#
     match app-id=r#".*ayugram.*"#
     open-on-workspace "5"
-    default-column-width { proportion 1.0; }
+    default-column-width { proportion 0.5; }
 }
 
 window-rule {
@@ -129,8 +130,6 @@ window-rule {
 }
 
 window-rule {
-    match app-id="goofcord"
-    match app-id="equibop"
     match app-id=r#"(?i)steam"#
     match app-id="foot"
     match app-id="kitty"
@@ -156,4 +155,10 @@ window-rule {
 window-rule {
     match app-id="foot" is-active=false
     opacity 0.8
+}
+
+workspace "5" {
+    layout {
+        center-focused-column "never"
+    }
 }
