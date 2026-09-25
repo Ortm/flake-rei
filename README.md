@@ -31,6 +31,17 @@ is down, adds you to `nix-users` if that group exists, and registers a freshly
 added machine directory with git (`git add -N`) because nix flakes only see
 git-tracked files.
 
+By hand, from this directory:
+
+```sh
+FLAKE_MACHINE=<machine> ./scripts/flake_rebuild.sh          # format, backup, switch
+# or the raw command:
+nix run home-manager/master -- switch --flake .#<machine> -b backup --impure
+```
+
+Later rebuilds: `just hm`, or `./scripts/flake_rebuild.sh` (it can be run from
+any checkout path).
+
 ### Which user gets installed
 
 The installing user is detected automatically. `hm-modules/user.nix` fills
@@ -78,9 +89,9 @@ autostart and the polkit agent path your distro ships.
 
 `hm-modules/desktop-stack.nix` installs the user-space helpers the niri config
 spawns — `wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`,
-`imagemagick`, `brightnessctl`, `swaylock-effects` and the `noctalia` shell —
-straight from nixpkgs, so a fresh install does not depend on distro/AUR
-packages. It is on by default; a machine whose distro already provides them sets
+`imagemagick`, `brightnessctl` and the `noctalia` shell — straight from nixpkgs,
+so a fresh install does not depend on distro/AUR packages. It is on by default;
+a machine whose distro already provides them sets
 `rei.desktopStack.enable = false;` (icelake does, so the flake's copies do not
 shadow its AUR ones in the session `PATH`). Related knobs:
 `rei.desktopStack.includeShell = false` skips `noctalia` (nixpkgs currently
@@ -139,56 +150,29 @@ needs host integration or a NixOS-only feature. The niri config is linked out of
 this checkout by `scripts/setup_niri.sh` and only spawns home-manager-owned paths
 (`~/.config/rei/...`, `~/.local/bin/rei-ocr`), so the clone can live anywhere.
 
-## Nix on non-NixOS systems
-
-Install nix via a script or your system's package manager and sometimes you will
-optionally need to:
-
-```sh
-sudo usermod -aG nix-users $(whoami) # nix-users group must be
-sudo systemctl start nix-daemon
-sudo systemctl enable --now nix-daemon.socket nix-daemon.service
-```
-
-### Manual first switch
-
-`./install.sh` already does this; the manual equivalent is:
-
-```sh
-export FLAKE_MACHINE=<machine name>
-nix run home-manager/master -- switch --flake ~/flake-rei#$FLAKE_MACHINE -b backup --impure
-```
-
-Later rebuilds: `just hm` (same command), or `scripts/flake_rebuild.sh`
-(formats, git-backups, then switches, and can be run from any checkout path).
-
-## Machines
-
-- `icelake` — my laptop with icelake arch
-
 ## Setup niri config
 
-`install.sh` links it automatically when the machine has niri dotfiles; to do it
-by hand:
+`install.sh` links it automatically when the machine has niri dotfiles
+(`--no-niri` skips it); by hand, from the checkout:
 
 ```sh
-export FLAKE_MACHINE=<machine name>
-~/flake-rei/scripts/setup_niri.sh
+FLAKE_MACHINE=<machine> ./scripts/setup_niri.sh
 ```
 
 If `~/.config/niri` already exists, the script moves it to a timestamped backup
-(`~/.config/niri.bak.YYYYMMDD-HHMMSS`) before linking the new config. The binds
-reference their helper files through `~/.config/rei/...` and `~/.local/bin/...`,
-which home-manager owns (`hm-modules/wayland/niri-assets.nix`), so the checkout
-can live anywhere.
+(`~/.config/niri.bak.YYYYMMDD-HHMMSS`) before linking `config_<machine>.kdl`,
+`generic/` and `<machine>/` into it. Everything the config spawns is resolved
+through home-manager-owned paths (`~/.config/rei/...`, `~/.local/bin/rei-ocr`),
+so the checkout can live anywhere.
 
-# Keybinds
+## Keybinds
 
 `Mod` = `Super`. Source of truth: `dotfiles/niri/generic/binds.kdl` +
-`dotfiles/niri/icelake/binds.kdl` (icelake wins on conflict).
-Keyboard layouts `us,ru`, toggle with `CapsLock`.
+`dotfiles/niri/icelake/binds.kdl` (icelake wins on conflict) — the same list
+`niri msg binds` prints. The `us,ru` layout with `CapsLock` toggling it is
+icelake's (`dotfiles/niri/icelake/input.kdl`).
 
-## Launch / system
+### Launch / system
 
 | Keys | Description |
 | ---- | ----------- |
@@ -201,7 +185,7 @@ Keyboard layouts `us,ru`, toggle with `CapsLock`.
 | `Mod + Shift + I` | Power off monitors |
 | `Mod + Tab` | Toggle overview |
 
-## Windows
+### Windows
 
 | Keys | Description |
 | ---- | ----------- |
@@ -214,7 +198,7 @@ Keyboard layouts `us,ru`, toggle with `CapsLock`.
 | `Mod + V` | Clipboard history (wofi) |
 | `Mod + Ctrl + V` | Wipe clipboard history |
 
-## Focus / move / resize
+### Focus / move / resize
 
 Arrows or vim-style (`H` left, `J` down, `K` up, `L` right).
 
@@ -227,14 +211,14 @@ Arrows or vim-style (`H` left, `J` down, `K` up, `L` right).
 | `Mod + Home / End` | Focus first / last column |
 | `Mod + Shift + Home / End` | Move column to first / last |
 
-## Column width presets (icelake)
+### Fullscreen / column width
 
 | Keys | Description |
 | ---- | ----------- |
-| `Mod + F` | Column width 100% |
-| `Mod + G` | Column width 90% |
+| `Mod + F` | Fullscreen (generic binds); icelake overrides it to column width 100% |
+| `Mod + G` | Column width 90% (icelake) |
 
-## Workspaces
+### Workspaces
 
 | Keys | Description |
 | ---- | ----------- |
@@ -243,7 +227,7 @@ Arrows or vim-style (`H` left, `J` down, `K` up, `L` right).
 | `Mod + Ctrl + 1–9` | Send column to workspace (keep focus) |
 | `Mod + F1–F9` | Focus column N |
 
-## Volume / media / brightness (work when locked)
+### Volume / media / brightness (work when locked)
 
 | Keys | Description |
 | ---- | ----------- |
