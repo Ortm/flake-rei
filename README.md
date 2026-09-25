@@ -12,9 +12,10 @@ sudo systemctl enable --now nix-daemon.socket nix-daemon.service
 
 ### First system-build with home-manager
 ```sh
-export FLAKE_MACHINE=<machine name>
 git clone https://github.com/Ortm/flake-rei.git ~/flake-rei
-nix run --experimental-features "flakes nix-command" home-manager/master -- switch --flake ~/flake-rei/#"$FLAKE_MACHINE" --experimental-features "nix-command flakes"
+cd ~/flake-rei
+./install.sh --machine <machine name> # or ./install.sh and pick interactively
+# flags: --no-niri to skip niri linking, FLAKE_MACHINE=<name> env also works
 ```
 
 ## Setup niri config:
