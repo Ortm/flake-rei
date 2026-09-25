@@ -133,8 +133,6 @@ window-rule {
 window-rule {
     match app-id=r#"(?i)steam"#
     match app-id="foot"
-    match app-id="kitty"
-    match app-id="com.mitchellh.ghostty"
     match app-id="ONLYOFFICE"
     match app-id="clash-verge"
     match app-id="^mpv$"

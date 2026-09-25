@@ -103,9 +103,6 @@ in
 
       # just
       just-lsp
-
-      # Rice
-      hyprls
     ];
 
   programs.ruff = {
@@ -152,29 +149,6 @@ in
             "120"
           ];
         };
-      }
-      {
-        name = "rust";
-        auto-format = true;
-        language-servers = [ "rust-analyzer" ];
-        indent = {
-          tab-width = 2;
-          unit = "  ";
-        };
-        formatter = {
-          command = "${pkgs.rustfmt}/bin/rustfmt";
-          args = [
-            "--edition"
-            "2021"
-            "--config"
-            "tab_spaces=2"
-          ];
-        };
-      }
-      {
-        name = "nu";
-        file-types = [ "nu" ];
-        language-servers = [ "${pkgs.nushell}/bin/nu --lsp" ];
       }
       {
         name = "python";
@@ -246,71 +220,6 @@ in
               #   enumMemberValues = { enabled = true; };
               #   parameterTypes = { enabled = true; };
               #   variableTypes = { enabled = true; };
-            };
-          };
-        };
-      };
-
-      rust-analyzer = {
-        command = "${pkgs.rust-analyzer}/bin/rust-analyzer";
-        config = {
-          check = {
-            command = "clippy";
-          };
-          inlayHints = {
-            bindingModeHints = {
-              enable = true;
-            };
-            chainingHints = {
-              enable = true;
-            };
-            closingBraceHints = {
-              enable = true;
-            };
-            closureCaptureHints = {
-              enable = true;
-            };
-            closureReturnTypeHints = {
-              enable = "always";
-            };
-            closureStyle = "impl_fn";
-            discriminantHints = {
-              enable = "always";
-            };
-            expressionAdjustmentHints = {
-              enable = "always";
-            };
-            implicitDrops = {
-              enable = true;
-            };
-            lifetimeElisionHints = {
-              enable = "always";
-              useParameterNames = true;
-            };
-            parameterHints = {
-              enable = true;
-            };
-            reborrowHints = {
-              enable = "always";
-            };
-            typeHints = {
-              enable = true;
-              hideClosureInitialization = false;
-              hideNamedConstructor = false;
-            };
-          };
-          cargo = {
-            buildScripts = {
-              enable = true;
-            };
-            features = "all";
-          };
-          procMacro = {
-            enable = true;
-          };
-          rustfmt = {
-            rangeFormatting = {
-              enable = true;
             };
           };
         };

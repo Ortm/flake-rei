@@ -41,13 +41,9 @@ in
     home-manager.enable = true;
     nix-your-shell.enable = true;
     fish.enable = true;
-    foot = {
-      enable = true;
-      settings.main.font = "GeistMonoNerdFontMono:size=9";
-    };
+    # foot lives in hm-modules/wayland/foot.nix (Wayland/Linux only)
     helix.enable = true;
     neovim.enable = true;
-    opencode.enable = true;
 
     hermes-agent = {
       enable = true;
@@ -70,13 +66,6 @@ in
       settings = {
         user = identity;
         ui.color = "always";
-      };
-    };
-
-    imv = {
-      settings.options = {
-        list_files_at_exit = true;
-        overlay_font = "Monospace:14";
       };
     };
 
@@ -168,21 +157,6 @@ in
       };
     };
 
-    # not included: optionaly
-    zathura.options = {
-      font = "SauceCodePro Nerd Font Mono 14";
-      selection-clipboard = "clipboard";
-      statusbar-home-tilda = true;
-      guioptions = "";
-    };
-
-    onlyoffice.settings = {
-      UITheme = "theme-dark";
-      editorWindowMode = false;
-      maximized = true;
-      titlebar = "none";
-    };
-
     pandoc.defaults = {
       metadata.author = fullName;
       pdf-engine = "xelatex";
@@ -235,27 +209,18 @@ in
         # dev
         just
         lazydocker
-        mosquitto
         deno
         lazyjj
 
-        # apps
-        ytfzf
-
-        # ml
-        easyocr
+        # apps (obsidian is unfree - allowed in flake.nix)
+        obsidian
 
         # fonts
       ]
       ++ (with nerd-fonts; [
-        arimo
-        caskaydia-mono
         symbols-only
-        sauce-code-pro
-        jetbrains-mono
         geist-mono
-      ])
-      ++ [ times-newer-roman ];
+      ]);
 
     sessionVariables =
       builtins.listToAttrs (
@@ -286,7 +251,6 @@ in
     sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
       "${config.home.homeDirectory}/.nix-profile/bin"
-      "${config.home.homeDirectory}/.opencode/bin"
       "${config.home.homeDirectory}/.kimi-code/bin"
       "/usr/bin"
 
@@ -323,7 +287,8 @@ in
     mouse: false
   '';
 
-  # FOR NIXOS MACHINE NEED TO DISABLE
+  # Non-NixOS only: this wires up the driver / GL paths a store binary needs on
+  # a foreign distro (see README, "Any Linux distro"). Set it to false on NixOS.
   targets.genericLinux.enable = true;
 
   news.display = "silent";

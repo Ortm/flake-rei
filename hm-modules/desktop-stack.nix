@@ -2,8 +2,11 @@
 # (dotfiles/niri/{generic,icelake}/*.kdl, scripts/*.sh). They have no host
 # integration, so they behave the same on NixOS and on any foreign distro, and
 # packing them here means a fresh install does not have to hunt distro/AUR
-# packages. Enabled by default; a machine whose distro already provides them
-# sets `rei.desktopStack.enable = false;` (icelake does).
+# packages. Enabled by default; a machine whose distro already provides them sets
+# `rei.desktopStack.enable = false;` (icelake does).
+#
+# The options above are declared here and the helper packages are added below;
+# nothing in this module assumes NixOS, only a Linux Wayland session.
 #
 # Deliberately NOT here (tier 2/3 - keep them host-side):
 #   - the compositor session: niri itself, the greeter, seat/logind and GPU

@@ -8,9 +8,9 @@ config, theming and the niri compositor config (`dotfiles/niri`, symlinked into
 
 | | |
 | --- | --- |
-| Architecture | `x86_64-linux` (the flake imports nixpkgs with `localSystem = "x86_64-linux"`) |
+| Architecture | `x86_64-linux` / `aarch64-linux`: `install.sh` detects the system it runs on and passes it to the flake as `FLAKE_SYSTEM` (override with `FLAKE_SYSTEM=aarch64-linux ./install.sh`). Falls back to `x86_64-linux` when nothing is set. |
 | Nix | with flakes enabled — install with the [Determinate installer](https://install.determinate.systems/nix) or your distro's package |
-| Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `swaylock`, `noctalia`) comes from the flake — see [Desktop stack](#desktop-stack-tier-1); the compositor session, portals and the polkit daemon stay with your distro |
+| Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `swaylock`, `noctalia`) comes from the flake — see [Desktop stack](#desktop-stack-tier-1); the compositor session, portals and the polkit daemon stay with your distro. The OCR bind (`Mod+X`) also needs `easyocr` on `PATH`. |
 
 ## Install
 
@@ -22,7 +22,9 @@ cd ~/flake-rei
 ```
 
 Flags: `--machine <name>`, `--no-niri` (skip niri config linking), `--yes`.
-`FLAKE_MACHINE=<name> ./install.sh` works too.
+`FLAKE_MACHINE=<name> ./install.sh` works too. The build system is detected
+(`FLAKE_SYSTEM=<system>` to override) and identity comes from the environment,
+which is why everything that switches passes `--impure`.
 
 `install.sh` also handles the non-NixOS papercuts: it starts `nix-daemon` if it
 is down, adds you to `nix-users` if that group exists, and registers a freshly
@@ -86,11 +88,33 @@ ships it as a beta, and the legacy `noctalia-shell` v4 package is a different
 program with a different binary name), and
 `rei.desktopStack.extraPackages = [ pkgs.fuzzel ];` adds more.
 
+`easyocr` (used by the `Mod+X` OCR bind) is deliberately *not* part of tier 1 —
+it drags in torch, ~1 GB. Install it from your distro, or
+`rei.desktopStack.extraPackages = [ pkgs.easyocr ];`.
+
 What stays host-side on purpose: the compositor session itself (greeter, seat,
 GPU/driver handling, the `wayland-sessions` entry), `xdg-desktop-portal*` (two
 portal stacks on one D-Bus session fight over the same names, which breaks
 screenshots and file pickers) and PAM-backed tools like `swaylock`, whose
 unlock needs the host's `/etc/pam.d/swaylock`.
+
+## Any Linux distro
+
+Nothing here assumes NixOS. The flake installs user-space packages and files
+that behave the same on any distro, and `targets.genericLinux` (in `home.nix`)
+wires up the driver / GL paths a store binary needs on a foreign distro — set it
+to `false` on NixOS.
+
+What your distro still has to provide is the host side of the desktop: the
+compositor session (greeter, seat, drivers, the `wayland-sessions` entry),
+`xdg-desktop-portal*`, the polkit agent, and PAM files such as
+`/etc/pam.d/swaylock` — see [Desktop stack](#desktop-stack-tier-1) for why.
+
+The module list in `flake.nix` is grouped by area (core, CLI tools, Wayland,
+theming) and is distro-neutral apart from `targets.genericLinux`: nothing in it
+needs host integration or a NixOS-only feature. The niri config is linked out of
+this checkout by `scripts/setup_niri.sh` and only spawns home-manager-owned paths
+(`~/.config/rei/...`, `~/.local/bin/rei-ocr`), so the clone can live anywhere.
 
 ## Nix on non-NixOS systems
 

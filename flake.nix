@@ -1,20 +1,42 @@
 {
-  description = "Gidrex flake configuration for working machines.";
+  # ══════════════════════════════════════════════════════════════════════════
+  # flake-rei — Home Manager configuration for my laptops
+  #
+  # A flake is the file nix looks for when you point it at this directory. It
+  # does three things, in order:
+  #
+  #   1. inputs  — the sources everything is built from (nixpkgs, home-manager,
+  #                catppuccin, the yazi plugins, hermes)
+  #   2. modules — the files under ./hm-modules that describe the configuration
+  #                (./home.nix is the main one; machines/<name>/default.nix
+  #                holds whatever is specific to one laptop)
+  #   3. outputs — one `homeConfiguration` per machine, which is what
+  #                `./install.sh` and `home-manager switch --flake` select
+  #
+  # Everyday commands:
+  #   ./install.sh            install on this machine (asks which one)
+  #   just hm                 rebuild after editing anything
+  #   nix flake check         sanity-check that the flake still evaluates
+  # ══════════════════════════════════════════════════════════════════════════
 
   inputs = {
-    # Core
+    # The base package set. Everything else follows it, so one
+    # `nix flake update` moves the whole system forward together.
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    # Home Manager turns the modules below into `home-manager switch`.
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    flake-utils.url = "github:numtide/flake-utils";
 
-    # Hermes agent and desktop app (local)
-    hermes-agent.url = "github:NousResearch/hermes-agent";
-
-    # Theming
+    # Catppuccin theming for every program that supports it (mocha, blue).
     catppuccin.url = "github:catppuccin/nix";
     catppuccin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Yazi plugins
+    # Hermes agent + its desktop app; enabled in ./home.nix.
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+
+    # Yazi plugins. `flake = false` because these repos are plain source
+    # trees, not flakes; their files are handed to the yazi module below.
     open-with-cmd.url = "github:Ape/open-with-cmd.yazi";
     open-with-cmd.flake = false;
     close-and-restore-tab.url = "github:MasouShizuka/close-and-restore-tab.yazi";
@@ -24,112 +46,116 @@
   outputs =
     { nixpkgs, home-manager, ... }@inputs:
     let
-      # Clean yazi plugins from docs
-      cleanPlugin =
-        src:
-        nixpkgs.lib.cleanSourceWith {
-          src = src;
-          filter =
-            path: type:
-            let
-              baseName = baseNameOf path;
-            in
-            !(
-              builtins.any (suffix: nixpkgs.lib.hasSuffix suffix baseName) [
-                ".md"
-                "LICENSE"
-                ".png"
-                ".jpg"
-              ]
-              || baseName == "README"
-              || nixpkgs.lib.hasInfix "LICENSE" baseName # exclude this files
-              || (
-                type == "directory" && builtins.pathExists path && builtins.length (builtins.attrNames (builtins.readDir path)) == 0
-              )
-            ); # empty dirs
-        };
+      lib = nixpkgs.lib;
 
-      # Module arguments
-      moduleArgs = {
-        yazi-plugins = builtins.mapAttrs (_: cleanPlugin) {
-          inherit (inputs) open-with-cmd close-and-restore-tab;
-        };
-      };
+      # ── which system to build for ─────────────────────────────────────────
+      # install.sh exports FLAKE_SYSTEM=<this machine's system> before
+      # switching, so a fresh clone builds for the machine it runs on
+      # (x86_64-linux, aarch64-linux, ...). Override it by hand for cross
+      # builds:  FLAKE_SYSTEM=aarch64-linux ./install.sh
+      # `nix flake check` evaluates without an environment and falls back to
+      # the default below.
+      defaultSystem = "x86_64-linux";
+      system = if builtins.getEnv "FLAKE_SYSTEM" == "" then defaultSystem else builtins.getEnv "FLAKE_SYSTEM";
 
-      # Common modules
-      commonModules = [
-        ./home.nix
-
-        # Sounds settings
-        ./hm-modules/sound/mpv.nix
-
-        # My cli/tui tools
-        ./hm-modules/termTools/yazi
-        ./hm-modules/termTools/fish
-        ./hm-modules/termTools/helix
-        ./hm-modules/termTools/neovim
-        ./hm-modules/termTools/less.nix
-
-        # Identity of the installing user (auto-detected, per-machine overridable)
-        ./hm-modules/user.nix
-
-        # Security
-        ./hm-modules/security/keys.nix
-
-        # Wayland apps
-        ./hm-modules/wayland/foot.nix
-        ./hm-modules/wayland/kitty.nix
-        ./hm-modules/wayland/ghostty.nix
-
-        # Files the niri config spawns by stable path (wofi menu, OCR helper)
-        ./hm-modules/wayland/niri-assets.nix
-
-        # Tier-1 desktop helpers from nixpkgs (clipboard, screenshots, shell)
-        ./hm-modules/desktop-stack.nix
-
-        # Hermes agent + desktop app
-        inputs.hermes-agent.homeManagerModules.default
-
-        # Theming (Im prefer catppuccin mocha theme)
-        inputs.catppuccin.homeModules.catppuccin
-        ./hm-modules/themes/gtk.nix
-        ./hm-modules/themes/qt.nix
-
-        { _module.args = moduleArgs; }
-      ];
-
+      # ── the package set ───────────────────────────────────────────────────
       pkgs = import nixpkgs {
-        localSystem = "x86_64-linux";
+        localSystem = system;
 
+        # Unfree software is refused unless it is named here.
         config = {
           allowUnfree = false;
           allowUnfreePredicate =
             pkg:
-            builtins.elem (nixpkgs.lib.getName pkg) [
+            builtins.elem (lib.getName pkg) [
               "unrar"
               "obsidian"
             ];
         };
       };
 
-      # Every directory under ./machines that has a default.nix becomes a
-      # `.#<name>` homeConfiguration: drop in machines/<name>/default.nix and
-      # ./install.sh picks it up on the next run, no flake edit needed.
-      machines = nixpkgs.lib.mapAttrs (name: _: ./machines/${name}) (
-        nixpkgs.lib.filterAttrs (name: type: type == "directory" && builtins.pathExists ./machines/${name}/default.nix) (
-          builtins.readDir ./machines
-        )
-      );
+      # ── yazi plugins ──────────────────────────────────────────────────────
+      # Plugin repos ship READMEs, licences and screenshots; drop those (and
+      # empty directories) so only the plugin itself is copied into the store.
+      stripDocs =
+        src:
+        lib.cleanSourceWith {
+          src = src;
+          filter =
+            path: type:
+            let
+              name = baseNameOf path;
+            in
+            !(
+              builtins.any (suffix: lib.hasSuffix suffix name) [
+                ".md"
+                "LICENSE"
+                ".png"
+                ".jpg"
+              ]
+              || name == "README"
+              || lib.hasInfix "LICENSE" name
+              || (type == "directory" && builtins.pathExists path && builtins.readDir path == { })
+            );
+        };
 
+      # Handed to every module as `yazi-plugins` (see hm-modules/termTools/yazi).
+      moduleArgs = {
+        yazi-plugins = builtins.mapAttrs (_: stripDocs) {
+          inherit (inputs) open-with-cmd close-and-restore-tab;
+        };
+      };
+
+      # ── modules: what the configuration is made of ───────────────────────
+      # Every file listed here applies to every machine: add a line and it
+      # becomes part of the configuration. The headings are only for reading.
+      baseModules = [
+        ./home.nix # the main file: programs, packages, session settings
+
+        ./hm-modules/sound/mpv.nix
+
+        # CLI/TUI tools
+        ./hm-modules/termTools/yazi
+        ./hm-modules/termTools/fish
+        ./hm-modules/termTools/helix
+        ./hm-modules/termTools/neovim
+        ./hm-modules/termTools/less.nix
+
+        # Who is installing: login name, home directory, git identity
+        ./hm-modules/user.nix
+
+        # gpg + gpg-agent
+        ./hm-modules/security/keys.nix
+
+        # Wayland / desktop
+        ./hm-modules/wayland/foot.nix # the terminal
+        ./hm-modules/wayland/niri-assets.nix # files the niri config spawns
+        ./hm-modules/desktop-stack.nix # clipboard, screenshots, OCR, media keys
+
+        # Theming
+        inputs.hermes-agent.homeManagerModules.default
+        inputs.catppuccin.homeModules.catppuccin
+        ./hm-modules/themes/gtk.nix
+        ./hm-modules/themes/qt.nix
+      ];
+
+      # ── machines: one configuration per ./machines/<name> ─────────────────
+      # A directory with a default.nix in it is a machine; nothing to register
+      # by hand. `./install.sh` lists exactly these.
+      machineDir = ./machines;
+      isMachineDir = name: type: type == "directory" && builtins.pathExists (machineDir + "/${name}/default.nix");
+      machineNames = builtins.attrNames (lib.filterAttrs isMachineDir (builtins.readDir machineDir));
     in
     {
-
-      # Home Manager builder
-      homeConfigurations = nixpkgs.lib.genAttrs (builtins.attrNames machines) (
-        name:
+      # `home-manager switch --flake .#icelake` builds this attribute.
+      homeConfigurations = lib.genAttrs machineNames (
+        machine:
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules = commonModules ++ [ machines.${name} ];
+          modules = baseModules ++ [
+            { _module.args = moduleArgs; } # yazi plugins, available to every module
+            (machineDir + "/${machine}") # this machine's own settings
+          ];
         }
       );
     };

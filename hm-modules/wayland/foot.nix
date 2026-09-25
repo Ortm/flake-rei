@@ -10,8 +10,12 @@ in
 {
   xdg.configFile."foot/foot.ini".force = true;
 
+  # foot is Wayland-only, so it is enabled here rather than in home.nix.
+  programs.foot.enable = true;
+
   programs.foot.settings = {
     main = {
+      font = "GeistMonoNerdFontMono:size=9";
       shell = mkIf config.programs.fish.enable "${pkgs.fish}/bin/fish";
       pad = "0x0";
       dpi-aware = "yes";

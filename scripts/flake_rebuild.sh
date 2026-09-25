@@ -28,6 +28,9 @@ SCRIPT_PATH="$(readlink -f -- "${BASH_SOURCE[0]}")"
 FLAKE_DIR="$(dirname -- "$(dirname -- "$SCRIPT_PATH")")"
 [ -f "$FLAKE_DIR/flake.nix" ] || error "Error: no flake.nix found in $FLAKE_DIR"
 
+# Same as install.sh: tell the flake which system to build for.
+export FLAKE_SYSTEM="${FLAKE_SYSTEM:-$(nix --experimental-features "nix-command flakes" eval --raw --impure --expr builtins.currentSystem 2>/dev/null || echo x86_64-linux)}"
+
 # Create temporary log files
 hm_log="/tmp/hm_rebuild.log"
 backup_log="/tmp/backup.log"

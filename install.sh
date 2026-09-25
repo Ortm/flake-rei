@@ -150,7 +150,16 @@ if getent group nix-users >/dev/null 2>&1 && ! id -nG "$INSTALL_USER" | tr ' ' '
     fi
 fi
 
-echo "Installing machine '$MACHINE' for user '$INSTALL_USER' (home: $INSTALL_HOME)"
+# Nix needs to know which system to build for. Detect it so the same checkout
+# installs on x86_64-linux and aarch64-linux alike; FLAKE_SYSTEM=<system>
+# overrides it (e.g. for a cross build).
+if [ -z "${FLAKE_SYSTEM:-}" ]; then
+    FLAKE_SYSTEM="$(nix --experimental-features "nix-command flakes" eval --raw --impure --expr builtins.currentSystem 2>/dev/null || true)"
+    FLAKE_SYSTEM="${FLAKE_SYSTEM:-x86_64-linux}"
+fi
+export FLAKE_SYSTEM
+
+echo "Installing machine '$MACHINE' for user '$INSTALL_USER' (home: $INSTALL_HOME, system: $FLAKE_SYSTEM)"
 nix --experimental-features "nix-command flakes" run home-manager/master -- \
     switch --flake "$FLAKE_DIR#$MACHINE" -b backup --impure \
     --experimental-features "nix-command flakes"
