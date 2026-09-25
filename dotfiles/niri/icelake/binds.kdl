@@ -16,5 +16,4 @@ binds {
     // Default layout
     Mod+F { set-column-width "100%"; }
     Mod+G { set-column-width "90%"; }
-    Mod+H { set-column-width "45%"; }
 }
