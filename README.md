@@ -10,7 +10,7 @@ config, theming and the niri compositor config (`dotfiles/niri`, symlinked into
 | --- | --- |
 | Architecture | `x86_64-linux` / `aarch64-linux`: `install.sh` detects the system it runs on and passes it to the flake as `FLAKE_SYSTEM` (override with `FLAKE_SYSTEM=aarch64-linux ./install.sh`). Falls back to `x86_64-linux` when nothing is set. |
 | Nix | with flakes enabled — install with the [Determinate installer](https://install.determinate.systems/nix) or your distro's package |
-| Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `swaylock`, `noctalia`, `easyocr`) comes from the flake — see [Desktop stack](#desktop-stack-tier-1); the compositor session, portals and the polkit daemon stay with your distro. |
+| Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `noctalia`, `easyocr`) comes from the flake and, with `rei.desktopSession.enable` (tier 2), so do niri itself, the D-Bus portals, a polkit agent, the keyring and the session apps — see [Desktop stack](#desktop-stack-tier-1) and [Tier 2](#tier-2--the-session-itself). Left to the distro: drivers, logind/udev, PAM and the display manager. |
 
 ## Install
 
@@ -94,11 +94,29 @@ grim/slurp, is part of tier 1 as well — via `rei.desktopStack.includeOcr`
 closure) and fetches its models into `~/.EasyOCR` the first time the bind runs;
 turn the option off if you never use it.
 
-What stays host-side on purpose: the compositor session itself (greeter, seat,
-GPU/driver handling, the `wayland-sessions` entry), `xdg-desktop-portal*` (two
-portal stacks on one D-Bus session fight over the same names, which breaks
-screenshots and file pickers) and PAM-backed tools like `swaylock`, whose
-unlock needs the host's `/etc/pam.d/swaylock`.
+What stays host-side on purpose, even with tier 2 on: the display manager /
+greeter, GPU driver handling, logind/seat and udev rules, the system polkit
+daemon, PAM files such as `/etc/pam.d/swaylock`, and PipeWire/WirePlumber behind
+the `wpctl` volume binds.
+
+## Tier 2 — the session itself
+
+`hm-modules/desktop-session.nix` (`rei.desktopSession.*`) installs the session
+itself, so a freshly installed distro needs almost nothing preinstalled. It is
+off by default; a machine turns it on with `rei.desktopSession.enable = true;`.
+
+| Option | Default | What it installs |
+| --- | --- | --- |
+| `compositor` | `true` | niri through home-manager's module: `niri`, `niri-session` (start it from a TTY), its systemd user units, `xwayland-satellite` for X11 apps, niri's own D-Bus portal configuration, and a `wayland-sessions/niri.desktop` entry under `~/.local/share` |
+| `polkitAgent` | `true` | polkit-gnome plus a systemd user service that starts its agent with the session, so privilege prompts work without a desktop-specific agent |
+| `keyring` | `true` | GNOME Keyring (+ libsecret); unlocking it at login needs a PAM hook, so without one it asks for the password |
+| `sessionApps` | `true` | `telegram-desktop` and `discord` — the apps `dotfiles/niri/generic/autostart.kdl` spawns |
+| `userDirs` | `true` | XDG user directories, including `~/Pictures/Screenshots` for niri's `screenshot-path` |
+| `extraPackages` | `[ ]` | anything else this session needs |
+
+Logging in: `niri-session` is on `PATH` now, so a TTY login works; the generated
+`~/.local/share/wayland-sessions/niri.desktop` is picked up by display managers
+that scan user data directories, most only look at `/usr/share/wayland-sessions`.
 
 ## Any Linux distro
 
@@ -107,10 +125,13 @@ that behave the same on any distro, and `targets.genericLinux` (in `home.nix`)
 wires up the driver / GL paths a store binary needs on a foreign distro — set it
 to `false` on NixOS.
 
-What your distro still has to provide is the host side of the desktop: the
-compositor session (greeter, seat, drivers, the `wayland-sessions` entry),
-`xdg-desktop-portal*`, the polkit agent, and PAM files such as
-`/etc/pam.d/swaylock` — see [Desktop stack](#desktop-stack-tier-1) for why.
+What your distro still has to provide is the host side of the session: GPU
+drivers (`mesa`/`vulkan` and `/run/opengl-driver`), logind/seat and udev rules,
+the display manager, the system polkit daemon, PAM files such as
+`/etc/pam.d/swaylock`, and PipeWire/WirePlumber for the volume binds. Everything
+else comes from the flake — the helpers in [Desktop stack](#desktop-stack-tier-1)
+always, and with [Tier 2](#tier-2--the-session-itself) the compositor, portals,
+polkit agent, keyring and session apps as well.
 
 The module list in `flake.nix` is grouped by area (core, CLI tools, Wayland,
 theming) and is distro-neutral apart from `targets.genericLinux`: nothing in it

@@ -62,7 +62,8 @@
       pkgs = import nixpkgs {
         localSystem = system;
 
-        # Unfree software is refused unless it is named here.
+        # Unfree software is refused unless it is named here. discord is only
+        # installed when `rei.desktopSession.sessionApps` is on (tier 2).
         config = {
           allowUnfree = false;
           allowUnfreePredicate =
@@ -70,6 +71,8 @@
             builtins.elem (lib.getName pkg) [
               "unrar"
               "obsidian"
+              "discord"
+              "discord-unwrapped"
             ];
         };
       };
@@ -130,7 +133,8 @@
         # Wayland / desktop
         ./hm-modules/wayland/foot.nix # the terminal
         ./hm-modules/wayland/niri-assets.nix # files the niri config spawns
-        ./hm-modules/desktop-stack.nix # clipboard, screenshots, OCR, media keys
+        ./hm-modules/desktop-stack.nix # tier 1: clipboard, screenshots, OCR, media keys
+        ./hm-modules/desktop-session.nix # tier 2: compositor + session helpers
 
         # Theming
         inputs.hermes-agent.homeManagerModules.default

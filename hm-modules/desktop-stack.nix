@@ -11,15 +11,13 @@
 # The OCR stack (`easyocr`, ~1.5 GB with torch) is on by default too; set
 # `rei.desktopStack.includeOcr = false` if you never use the Mod+X bind.
 #
-# Deliberately NOT here (tier 2/3 - keep them host-side):
-#   - the compositor session: niri itself, the greeter, seat/logind and GPU
-#     driver handling. A store compositor needs a wayland-sessions .desktop
-#     entry plus host driver work (nixGL-style) for proprietary drivers.
-#   - xdg-desktop-portal*: two portal stacks on one D-Bus session fight over
-#     the same names, which breaks screenshots and file pickers in confusing
-#     ways. Keep the distro's.
-#   - PAM-backed tools: a store `swaylock` reads /etc/pam.d/swaylock from the
-#     host, so it only unlocks when the distro ships that file.
+# Tier 2 (compositor, portal stack, polkit agent, keyring, session apps) is
+# opt-in per machine in hm-modules/desktop-session.nix.
+#
+# Deliberately NOT here, because they need root or the host's session:
+#   - the display manager/greeter, seat/logind and GPU driver handling
+#   - the system polkit daemon, and PAM files: a store `swaylock` (or a keyring)
+#     only unlocks when the distro ships /etc/pam.d/swaylock
 {
   config,
   lib,
@@ -46,7 +44,6 @@ let
     slurp # region selection for the OCR script
     imagemagick # OCR pre-processing (scripts/OCR_select_area.sh), blur-wallpapers
     brightnessctl # noctalia brightness keys
-    swaylock-effects # `swaylock` for a manual lock (needs host /etc/pam.d/swaylock)
   ];
 in
 {
