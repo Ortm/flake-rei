@@ -19,5 +19,7 @@ grim -g "$(slurp)" - | \
 
 easyocr -l ru en -f "$tmp_img" --detail=0 | wl-copy
 
-# paru -S python-easyocr slurp imagemagick grim wl-clipboard
+# Needs grim, slurp, imagemagick, wl-clipboard and easyocr - `rei.desktopStack`
+# brings all of them (hm-modules/desktop-stack.nix). easyocr downloads its
+# models into ~/.EasyOCR on the first run.
 

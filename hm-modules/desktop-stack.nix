@@ -8,6 +8,9 @@
 # The options above are declared here and the helper packages are added below;
 # nothing in this module assumes NixOS, only a Linux Wayland session.
 #
+# The OCR stack (`easyocr`, ~1.5 GB with torch) is on by default too; set
+# `rei.desktopStack.includeOcr = false` if you never use the Mod+X bind.
+#
 # Deliberately NOT here (tier 2/3 - keep them host-side):
 #   - the compositor session: niri itself, the greeter, seat/logind and GPU
 #     driver handling. A store compositor needs a wayland-sessions .desktop
@@ -39,11 +42,11 @@ let
     cliphist # history store: `wl-paste --watch cliphist store`
     wl-clipboard # wl-copy / wl-paste plumbing
     playerctl # media keys (Mod+Shift+Equal / Minus, Mod+Backspace)
-    grim # `screenshot` bind + scripts/OCR_select_area.sh
+    grim # `screenshot` binds + the OCR script's region grab
     slurp # region selection for the OCR script
-    imagemagick # OCR pre-processing, scripts/swaylock_fancy.sh, blur-wallpapers
+    imagemagick # OCR pre-processing (scripts/OCR_select_area.sh), blur-wallpapers
     brightnessctl # noctalia brightness keys
-    swaylock-effects # provides the `swaylock` binary for scripts/{swaylock_fancy,power-menu}.sh
+    swaylock-effects # `swaylock` for a manual lock (needs host /etc/pam.d/swaylock)
   ];
 in
 {
@@ -71,6 +74,19 @@ in
       '';
     };
 
+    includeOcr = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Also install `easyocr`, which the `Mod+X` OCR bind
+        (scripts/OCR_select_area.sh, rendered as `~/.local/bin/rei-ocr`) runs
+        after grabbing the screen region with grim/slurp. easyocr drags in
+        torch, so it is the biggest piece of this module; turn it off if you
+        never use the OCR bind. Its model files are fetched into `~/.EasyOCR`
+        the first time the bind runs.
+      '';
+    };
+
     extraPackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
@@ -80,6 +96,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = helpers ++ optional cfg.includeShell pkgs.noctalia ++ cfg.extraPackages;
+    home.packages =
+      helpers ++ optional cfg.includeShell pkgs.noctalia ++ optional cfg.includeOcr pkgs.easyocr ++ cfg.extraPackages;
   };
 }

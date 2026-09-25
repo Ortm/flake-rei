@@ -35,9 +35,9 @@
 
       # Subtitles & UI
       sub-auto = "fuzzy";
-      sub-font = "SauceCodePro Nerd Font Mono";
+      sub-font = "GeistMono Nerd Font Mono"; # nerd-fonts.geist-mono (home.nix)
       sub-font-size = 36;
-      osd-font = "SauceCodePro Nerd Font Mono";
+      osd-font = "GeistMono Nerd Font Mono";
       osd-bar = "no";
       border = "no";
     };

@@ -10,7 +10,7 @@ config, theming and the niri compositor config (`dotfiles/niri`, symlinked into
 | --- | --- |
 | Architecture | `x86_64-linux` / `aarch64-linux`: `install.sh` detects the system it runs on and passes it to the flake as `FLAKE_SYSTEM` (override with `FLAKE_SYSTEM=aarch64-linux ./install.sh`). Falls back to `x86_64-linux` when nothing is set. |
 | Nix | with flakes enabled — install with the [Determinate installer](https://install.determinate.systems/nix) or your distro's package |
-| Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `swaylock`, `noctalia`) comes from the flake — see [Desktop stack](#desktop-stack-tier-1); the compositor session, portals and the polkit daemon stay with your distro. The OCR bind (`Mod+X`) also needs `easyocr` on `PATH`. |
+| Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `swaylock`, `noctalia`, `easyocr`) comes from the flake — see [Desktop stack](#desktop-stack-tier-1); the compositor session, portals and the polkit daemon stay with your distro. |
 
 ## Install
 
@@ -88,9 +88,11 @@ ships it as a beta, and the legacy `noctalia-shell` v4 package is a different
 program with a different binary name), and
 `rei.desktopStack.extraPackages = [ pkgs.fuzzel ];` adds more.
 
-`easyocr` (used by the `Mod+X` OCR bind) is deliberately *not* part of tier 1 —
-it drags in torch, ~1 GB. Install it from your distro, or
-`rei.desktopStack.extraPackages = [ pkgs.easyocr ];`.
+`easyocr`, which the `Mod+X` OCR bind runs after grabbing the region with
+grim/slurp, is part of tier 1 as well — via `rei.desktopStack.includeOcr`
+(default `true`). It is the heaviest piece of the module (torch, ~1.5 GB of
+closure) and fetches its models into `~/.EasyOCR` the first time the bind runs;
+turn the option off if you never use it.
 
 What stays host-side on purpose: the compositor session itself (greeter, seat,
 GPU/driver handling, the `wayland-sessions` entry), `xdg-desktop-portal*` (two
