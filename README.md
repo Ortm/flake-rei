@@ -10,7 +10,7 @@ config, theming and the niri compositor config (`dotfiles/niri`, symlinked into
 | --- | --- |
 | Architecture | `x86_64-linux` (the flake imports nixpkgs with `localSystem = "x86_64-linux"`) |
 | Nix | with flakes enabled — install with the [Determinate installer](https://install.determinate.systems/nix) or your distro's package |
-| Desktop stack | `niri`, `noctalia`, `wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`/`slurp`, `imagemagick` are spawned by the niri config but are **not** packaged by this flake — install them from your distro/AUR first |
+| Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `swaylock`, `noctalia`) comes from the flake — see [Desktop stack](#desktop-stack-tier-1); the compositor session, portals and the polkit daemon stay with your distro |
 
 ## Install
 
@@ -71,6 +71,26 @@ $EDITOR machines/mylaptop/default.nix                           # FLAKE_MACHINE 
 A machine directory holds everything host specific: `FLAKE_MACHINE`, your
 identity, and — under `dotfiles/niri/<machine>/` — outputs, layout presets,
 autostart and the polkit agent path your distro ships.
+
+## Desktop stack (tier 1)
+
+`hm-modules/desktop-stack.nix` installs the user-space helpers the niri config
+spawns — `wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`,
+`imagemagick`, `brightnessctl`, `swaylock-effects` and the `noctalia` shell —
+straight from nixpkgs, so a fresh install does not depend on distro/AUR
+packages. It is on by default; a machine whose distro already provides them sets
+`rei.desktopStack.enable = false;` (icelake does, so the flake's copies do not
+shadow its AUR ones in the session `PATH`). Related knobs:
+`rei.desktopStack.includeShell = false` skips `noctalia` (nixpkgs currently
+ships it as a beta, and the legacy `noctalia-shell` v4 package is a different
+program with a different binary name), and
+`rei.desktopStack.extraPackages = [ pkgs.fuzzel ];` adds more.
+
+What stays host-side on purpose: the compositor session itself (greeter, seat,
+GPU/driver handling, the `wayland-sessions` entry), `xdg-desktop-portal*` (two
+portal stacks on one D-Bus session fight over the same names, which breaks
+screenshots and file pickers) and PAM-backed tools like `swaylock`, whose
+unlock needs the host's `/etc/pam.d/swaylock`.
 
 ## Nix on non-NixOS systems
 

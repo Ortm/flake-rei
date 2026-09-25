@@ -84,6 +84,9 @@
         # Files the niri config spawns by stable path (wofi menu, OCR helper)
         ./hm-modules/wayland/niri-assets.nix
 
+        # Tier-1 desktop helpers from nixpkgs (clipboard, screenshots, shell)
+        ./hm-modules/desktop-stack.nix
+
         # Hermes agent + desktop app
         inputs.hermes-agent.homeManagerModules.default
 
