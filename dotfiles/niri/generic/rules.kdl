@@ -112,6 +112,7 @@ window-rule {
     match app-id="discord"
     match app-id=r#".*telegram.*"#
     match app-id=r#".*ayugram.*"#
+    open-focused false
     open-on-workspace "5"
     default-column-width { proportion 0.5; }
 }
@@ -155,10 +156,4 @@ window-rule {
 window-rule {
     match app-id="foot" is-active=false
     opacity 0.8
-}
-
-workspace "5" {
-    layout {
-        center-focused-column "never"
-    }
 }

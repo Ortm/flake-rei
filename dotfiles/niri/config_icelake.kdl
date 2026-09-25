@@ -18,18 +18,6 @@ clipboard {
     disable-primary
 }
 
-input {
-    keyboard {
-        xkb {
-            // List your desired layouts separated by commas (e.g., US and another language)
-            layout "us,ru"
-
-            // Set your shortcut toggle option
-            options "grp:caps_toggle"
-        }
-    }
-}
-
 debug {
     enable-overlay-planes
     disable-direct-scanout
