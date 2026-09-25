@@ -7,24 +7,39 @@ set -euo pipefail
 #   ./install.sh icelake
 #   FLAKE_MACHINE=icelake ./install.sh
 #
+# The configuration is installed for whoever runs this script: hm-modules/user.nix
+# fills home.username / home.homeDirectory from the environment (that is why the
+# switch below passes --impure), so a fresh clone needs no edit first.
+#
 # Replaces the manual README steps:
 #   export FLAKE_MACHINE=<machine name>
-#   nix run ... home-manager/master -- switch --flake ...
+#   nix run ... home-manager/master -- switch --flake ... --impure
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 FLAKE_DIR="$SCRIPT_DIR"
 
-MACHINE="${FLAKE_MACHINE:-}"
+INSTALL_USER="$(id -un)"
+INSTALL_HOME="$(getent passwd "$INSTALL_USER" 2>/dev/null | cut -d: -f6 || true)"
+[ -n "$INSTALL_HOME" ] || INSTALL_HOME="$HOME"
+
+MACHINE=""
+MACHINE_FROM_ENV="${FLAKE_MACHINE:-}"
 NO_NIRI=0
 ASSUME_YES=0
+
+# Machine dirs are exactly the ones the flake exposes as `.#<name>`
+# (machines/<name>/default.nix).
+list_machines() {
+    for d in "$FLAKE_DIR"/machines/*/; do
+        [ -f "${d}default.nix" ] && basename "$d"
+    done
+}
 
 usage() {
     echo "Usage: ./install.sh [--machine <name>] [--no-niri] [--yes]"
     echo ""
     echo "Available machines:"
-    for d in "$FLAKE_DIR"/machines/*/; do
-        [ -d "$d" ] && echo "  - $(basename "$d")"
-    done
+    list_machines | sed 's/^/  - /'
 }
 
 while [ $# -gt 0 ]; do
@@ -51,9 +66,9 @@ while [ $# -gt 0 ]; do
             exit 1
             ;;
         *)
-            # positional machine name
+            # positional machine name; an explicit name beats FLAKE_MACHINE
             if [ -n "$MACHINE" ]; then
-                echo "Machine already set to '$MACHINE', unexpected argument: $1" >&2
+                echo "Only one machine name expected, unexpected argument: $1" >&2
                 exit 1
             fi
             MACHINE="$1"
@@ -62,11 +77,16 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# FLAKE_MACHINE=<name> in the environment (it is a session variable on
+# already-installed machines) applies when nothing was given on the CLI.
+[ -n "$MACHINE" ] || MACHINE="$MACHINE_FROM_ENV"
+
 # Interactive choice when nothing given
 if [ -z "$MACHINE" ]; then
-    mapfile -t AVAILABLE < <(for d in "$FLAKE_DIR"/machines/*/; do [ -d "$d" ] && basename "$d"; done)
+    mapfile -t AVAILABLE < <(list_machines)
     if [ "${#AVAILABLE[@]}" -eq 0 ]; then
         echo "No machines found in $FLAKE_DIR/machines/" >&2
+        echo "Create one with a default.nix in machines/<name>/ and re-run." >&2
         exit 1
     fi
     if [ "${#AVAILABLE[@]}" -eq 1 ]; then
@@ -89,9 +109,9 @@ if [ -z "$MACHINE" ]; then
     exit 1
 fi
 
-if [ ! -d "$FLAKE_DIR/machines/$MACHINE" ]; then
+if [ ! -f "$FLAKE_DIR/machines/$MACHINE/default.nix" ]; then
     echo "Unknown machine '$MACHINE'. Available:" >&2
-    for d in "$FLAKE_DIR"/machines/*/; do [ -d "$d" ] && echo "  - $(basename "$d")" >&2; done
+    list_machines | sed 's/^/  - /' >&2
     exit 1
 fi
 
@@ -104,6 +124,15 @@ if ! command -v nix >/dev/null 2>&1; then
     exit 1
 fi
 
+# Flakes only see git-tracked files: a machine directory that was just added
+# must be registered or evaluation fails with "not tracked by Git".
+if [ -d "$FLAKE_DIR/.git" ] && command -v git >/dev/null 2>&1; then
+    if [ -n "$(git -C "$FLAKE_DIR" ls-files --others --exclude-standard -- "machines/$MACHINE")" ]; then
+        echo "Registering machines/$MACHINE with git (flakes ignore untracked files)..."
+        git -C "$FLAKE_DIR" add --intent-to-add -- "machines/$MACHINE"
+    fi
+fi
+
 # Preflight: daemon (non-NixOS multi-user)
 if systemctl list-unit-files 2>/dev/null | grep -q nix-daemon; then
     if ! systemctl is-active --quiet nix-daemon.service nix-daemon.socket 2>/dev/null; then
@@ -113,17 +142,17 @@ if systemctl list-unit-files 2>/dev/null | grep -q nix-daemon; then
 fi
 
 # Preflight: nix-users group (distro/Determinate multi-user setups)
-if getent group nix-users >/dev/null 2>&1 && ! id -nG "$USER" | tr ' ' '\n' | grep -qx nix-users; then
-    echo "Adding $USER to nix-users group (needs re-login to take effect)..."
-    sudo usermod -aG nix-users "$USER"
+if getent group nix-users >/dev/null 2>&1 && ! id -nG "$INSTALL_USER" | tr ' ' '\n' | grep -qx nix-users; then
+    echo "Adding $INSTALL_USER to nix-users group (needs re-login to take effect)..."
+    sudo usermod -aG nix-users "$INSTALL_USER"
     if [ "$ASSUME_YES" -eq 0 ]; then
         echo "NOTE: group membership applies after re-login. Continuing anyway..." >&2
     fi
 fi
 
-echo "Switching home-manager for machine '$MACHINE'..."
+echo "Installing machine '$MACHINE' for user '$INSTALL_USER' (home: $INSTALL_HOME)"
 nix --experimental-features "nix-command flakes" run home-manager/master -- \
-    switch --flake "$FLAKE_DIR#$MACHINE" -b backup \
+    switch --flake "$FLAKE_DIR#$MACHINE" -b backup --impure \
     --experimental-features "nix-command flakes"
 
 if [ "$NO_NIRI" -eq 0 ] && [ -x "$FLAKE_DIR/scripts/setup_niri.sh" ]; then
@@ -133,6 +162,13 @@ if [ "$NO_NIRI" -eq 0 ] && [ -x "$FLAKE_DIR/scripts/setup_niri.sh" ]; then
     else
         echo "No niri dotfiles for '$MACHINE', skipping setup_niri.sh."
     fi
+fi
+
+# Identity is optional: without rei.user.email git keeps asking until it is set.
+if ! grep -q "rei\.user" "$FLAKE_DIR/machines/$MACHINE/default.nix"; then
+    echo
+    echo "No git/jujutsu identity set for '$MACHINE'. Add to machines/$MACHINE/default.nix:"
+    echo "  rei.user = { name = \"Your Name\"; email = \"you@example.com\"; };"
 fi
 
 echo "Done. Machine '$MACHINE' installed."

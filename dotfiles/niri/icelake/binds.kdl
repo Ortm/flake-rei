@@ -1,6 +1,6 @@
 binds {
 
-    Mod+V { spawn-sh "cliphist list | wofi --conf /home/vix/flake-rei/dotfiles/wofi/icelake_config --style /home/vix/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
+    Mod+V { spawn-sh "cliphist list | wofi --conf $HOME/.config/rei/wofi/icelake_config --style $HOME/.config/rei/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
 
     XF86AudioRaiseVolume   allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
     XF86AudioLowerVolume   allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }

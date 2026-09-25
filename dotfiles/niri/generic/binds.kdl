@@ -1,7 +1,7 @@
 binds {
     Mod+Return { spawn "foot"; }
     Mod+SPACE { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+X { spawn-sh "/home/vix/flake-rei/scripts/OCR_select_area.sh"; } // TODO: поставить модельку попизже
+    Mod+X { spawn-sh "$HOME/.local/bin/rei-ocr"; } // TODO: поставить модельку попизже
     
     Mod+Q { close-window; }
     Mod+F { fullscreen-window; }
@@ -27,7 +27,7 @@ binds {
     Mod+Shift+S { screenshot-window show-pointer=false write-to-disk=false; }
     Mod+Ctrl+S { screenshot-window show-pointer=false write-to-disk=true; }
     // Mod+Ctrl+Y { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+V { spawn-sh "cliphist list | wofi --conf /home/vix/flake-rei/dotfiles/wofi/icelake_config --style /home/vix/flake-rei/dotfiles/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
+    Mod+V { spawn-sh "cliphist list | wofi --conf $HOME/.config/rei/wofi/icelake_config --style $HOME/.config/rei/wofi/style.css -S dmenu --sort-order=default --cache-file=/dev/null | cliphist decode | wl-copy -n"; }
     Mod+Ctrl+V { spawn-sh "cliphist wipe"; } // TODO: replace with faster one
 
     Mod+Up {  focus-window-up; }

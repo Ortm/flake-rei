@@ -70,6 +70,9 @@
         ./hm-modules/termTools/neovim
         ./hm-modules/termTools/less.nix
 
+        # Identity of the installing user (auto-detected, per-machine overridable)
+        ./hm-modules/user.nix
+
         # Security
         ./hm-modules/security/keys.nix
 
@@ -77,6 +80,9 @@
         ./hm-modules/wayland/foot.nix
         ./hm-modules/wayland/kitty.nix
         ./hm-modules/wayland/ghostty.nix
+
+        # Files the niri config spawns by stable path (wofi menu, OCR helper)
+        ./hm-modules/wayland/niri-assets.nix
 
         # Hermes agent + desktop app
         inputs.hermes-agent.homeManagerModules.default
@@ -103,10 +109,14 @@
         };
       };
 
-      # Machine configurations
-      machines = {
-        icelake = ./machines/icelake;
-      };
+      # Every directory under ./machines that has a default.nix becomes a
+      # `.#<name>` homeConfiguration: drop in machines/<name>/default.nix and
+      # ./install.sh picks it up on the next run, no flake edit needed.
+      machines = nixpkgs.lib.mapAttrs (name: _: ./machines/${name}) (
+        nixpkgs.lib.filterAttrs (name: type: type == "directory" && builtins.pathExists ./machines/${name}/default.nix) (
+          builtins.readDir ./machines
+        )
+      );
 
     in
     {

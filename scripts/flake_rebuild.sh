@@ -22,7 +22,11 @@ if [ -z "$FLAKE_MACHINE" ]; then
 fi
 
 # Variables
-FLAKE_DIR="$HOME/flake-rei"
+# The flake lives next to this script (scripts/..), so the checkout can be
+# cloned anywhere - no hardcoded $HOME/<name> path.
+SCRIPT_PATH="$(readlink -f -- "${BASH_SOURCE[0]}")"
+FLAKE_DIR="$(dirname -- "$(dirname -- "$SCRIPT_PATH")")"
+[ -f "$FLAKE_DIR/flake.nix" ] || error "Error: no flake.nix found in $FLAKE_DIR"
 
 # Create temporary log files
 hm_log="/tmp/hm_rebuild.log"

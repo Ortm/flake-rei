@@ -9,15 +9,21 @@ let
     mkIf
     mkDefault
     mkForce
-    strings
+    optionalAttrs
     ;
-  inherit (strings) toUpper toLower;
-  inherit (builtins) pathExists substring stringLength;
+  inherit (builtins) pathExists;
 
-  username = "vix";
-  Username = toUpper (substring 0 1 username) + toLower (substring 1 (stringLength username - 1) username); # vix -> Gidrex
-  name = "Artem";
-  mail = "aartemchik66@gmail.com";
+  # Login name, home directory and git identity come from hm-modules/user.nix:
+  # detected from whoever runs the switch, overridable per machine in
+  # machines/<name>/default.nix.
+  inherit (config.rei.user) name fullName email;
+
+  # email is optional (git keeps its own setting when we leave it alone), so
+  # build the block with every field present instead of merging sub-attrsets.
+  identity = {
+    name = name;
+  }
+  // optionalAttrs (email != "") { inherit email; };
 
 in
 {
@@ -62,8 +68,7 @@ in
     jujutsu = {
       enable = true;
       settings = {
-        user.email = "${mail}";
-        user.name = "${Username}";
+        user = identity;
         ui.color = "always";
       };
     };
@@ -147,8 +152,9 @@ in
       enable = true;
       lfs.enable = true;
       settings = {
-        user.name = "${Username}";
-        user.email = "${mail}";
+        user = identity // {
+          signingkey = "~/.ssh/id_rsa.pub";
+        };
         init.defaultBranch = "main";
         pull.rebase = true;
         rebase.autostash = true;
@@ -156,7 +162,6 @@ in
         push.autoSetupRemote = true;
         commit.gpgsign = false;
         rerere.enabled = true;
-        user.signingkey = "~/.ssh/id_rsa.pub";
         core.whitespace = "trailing-space,space-before-tab";
         core.editor = "hx";
         safe = mkIf (pathExists "/opt/flutter") { directory = "/opt/flutter"; };
@@ -179,7 +184,7 @@ in
     };
 
     pandoc.defaults = {
-      metadata.author = "${name}";
+      metadata.author = fullName;
       pdf-engine = "xelatex";
       citeproc = true;
     };
@@ -299,9 +304,6 @@ in
       "${config.home.homeDirectory}/Android/Sdk/platform-tools"
       "${config.home.homeDirectory}/Android/Sdk/emulator"
     ];
-
-    username = "${username}";
-    homeDirectory = "/home/${username}";
 
     enableNixpkgsReleaseCheck = false;
     stateVersion = "26.05";
