@@ -2,7 +2,7 @@ input {
     keyboard {
         xkb {
             layout "us,ru"
-            options "grp:caps_toogle"
+            options "grp:caps_toggle"
             rules "evdev"
             model "pc105"
         }
