@@ -35,6 +35,18 @@
     # Hermes agent + its desktop app; enabled in ./home.nix.
     hermes-agent.url = "github:NousResearch/hermes-agent";
 
+    # Encrypted secrets (the Yandex Music token) — ./secrets + .sops.yaml.
+    # The age key lives outside the repo in ~/.config/sops/age/keys.txt.
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # player-converter: mirrors a Yandex Music playlist onto the USB player;
+    # enabled per machine via rei.playerConverter (see hm-modules/).
+    # The repo is private, so it is fetched over SSH; if it ever goes public,
+    # this can go back to the anonymous `github:Ortm/player_coverter`.
+    player-converter.url = "git+ssh://git@github.com/Ortm/player_coverter";
+    player-converter.inputs.nixpkgs.follows = "nixpkgs";
+
     # Yazi plugins. `flake = false` because these repos are plain source
     # trees, not flakes; their files are handed to the yazi module below.
     open-with-cmd.url = "github:Ape/open-with-cmd.yazi";
@@ -61,6 +73,10 @@
       # ── the package set ───────────────────────────────────────────────────
       pkgs = import nixpkgs {
         localSystem = system;
+
+        # player-converter ships its own package (programs.player-converter
+        # picks it up from here); everything else stays stock nixpkgs.
+        overlays = [ inputs.player-converter.overlays.default ];
 
         # Unfree software is refused unless it is named here. discord is only
         # installed when `rei.desktopSession.sessionApps` is on (tier 2).
@@ -130,6 +146,12 @@
         # gpg + gpg-agent
         ./hm-modules/security/keys.nix
 
+        # Encrypted secrets: sops files under ./secrets, age key outside the repo
+        ./hm-modules/security/sops.nix
+
+        # Mirror a Yandex Music playlist onto the USB player (see rei.playerConverter)
+        ./hm-modules/player-converter.nix
+
         # Wayland / desktop
         ./hm-modules/wayland/foot.nix # the terminal
         ./hm-modules/wayland/niri-assets.nix # files the niri config spawns
@@ -139,6 +161,8 @@
         # Theming
         inputs.hermes-agent.homeManagerModules.default
         inputs.catppuccin.homeModules.catppuccin
+        inputs.sops-nix.homeManagerModules.sops
+        inputs.player-converter.homeManagerModules.default
         ./hm-modules/themes/gtk.nix
         ./hm-modules/themes/qt.nix
       ];

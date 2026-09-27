@@ -13,6 +13,10 @@
 hm:
     FLAKE_SYSTEM="${FLAKE_SYSTEM:-$(nix eval --raw --impure --expr builtins.currentSystem)}" home-manager switch --flake ./#$FLAKE_MACHINE -b backup --impure
 
+# Edit the encrypted secrets (needs the age key at ~/.config/sops/age/keys.txt)
+secrets:
+    sops secrets/secrets.yaml
+
 # Generate blurred versions of wallpapers in each directory (parallel processing)
 blur-wallpapers:
     #!/usr/bin/env bash

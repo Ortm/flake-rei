@@ -1,0 +1,12 @@
+# sops configuration: which age keys may decrypt what.
+#
+# The private key is NOT here — it lives in ~/.config/sops/age/keys.txt
+# (back it up: without it the secrets below cannot be decrypted).
+keys:
+  - &vix age1s0zde7ar2esywnrn4x7fzgv0u5jzcee2zk6dxnpdgx8pk6zs4vyqqddwr5
+
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *vix

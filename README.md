@@ -85,6 +85,55 @@ A machine directory holds everything host specific: `FLAKE_MACHINE`, your
 identity, and — under `dotfiles/niri/<machine>/` — outputs, layout presets,
 autostart and the polkit agent path your distro ships.
 
+## Secrets (sops + age)
+
+Encrypted secrets live in `secrets/*.yaml` and are decrypted at activation to
+`~/.config/sops-nix/secrets/<name>` (0600) by `sops-nix`. The age key that can
+decrypt them is **not** in this repo:
+
+```sh
+mkdir -p ~/.config/sops/age
+age-keygen -o ~/.config/sops/age/keys.txt        # back this up!
+# put your public key in .sops.yaml (keys: - &you age1...), then re-encrypt:
+sops updatekeys secrets/secrets.yaml
+just secrets                                     # edit the file; sops re-encrypts on save
+```
+
+Losing the age key means the secrets are unrecoverable, so keep a copy off
+the machine. Adding a secret: declare it under `sops.secrets` in
+`hm-modules/security/sops.nix` and add the key to `secrets/secrets.yaml`.
+
+## Yandex Music → USB player
+
+`rei.playerConverter` mirrors a Yandex Music playlist onto a USB mass-storage
+player with [player-converter](https://github.com/Ortm/player_coverter): every
+track is numbered by playlist position (`001-Title - Artist.flac`), files that
+are already on disk under an older name are renamed instead of re-downloaded,
+and the player is mirrored exactly — anything removed from the playlist (or
+cut by `maxTracks` / `maxTotalMb`) is deleted from cache and player.
+
+```nix
+# machines/<name>/default.nix
+rei.playerConverter = {
+  enable = true;
+  # playlistUrl defaults to your Liked tracks; the player's mount point:
+  playerDir = "/run/media/<user>/<LABEL>/Music";
+};
+```
+
+The token comes from `secrets/secrets.yaml` (`ym-token`, see above). Sync by
+hand once the player is plugged in — with `rei.playerConverter.schedule =
+"daily"` a systemd user timer does it instead (it skips while the player is
+absent):
+
+```sh
+player-converter download     # fetch the playlist into ~/Music/player-converter
+player-converter sync         # mirror the cache onto the player
+```
+
+The flake input points at the repo over SSH because it is private; switch it
+back to `github:Ortm/player_coverter` in `flake.nix` once it is public.
+
 ## Desktop stack (tier 1)
 
 `hm-modules/desktop-stack.nix` installs the user-space helpers the niri config
