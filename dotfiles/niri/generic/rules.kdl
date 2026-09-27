@@ -91,6 +91,7 @@ window-rule {
 window-rule {
     match app-id=".*zen"
     match app-id="glide-glide"
+    match app-id=".*firefox.*"
     match app-id="Yandex-browser"
     match app-id="chromium"
     open-on-workspace "3"
