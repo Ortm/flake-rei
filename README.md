@@ -105,8 +105,8 @@ the machine. Adding a secret: declare it under `sops.secrets` in
 
 ## Yandex Music → USB player
 
-`rei.playerConverter` mirrors a Yandex Music playlist onto a USB mass-storage
-player with [player-converter](https://github.com/Ortm/player_coverter): every
+`rei.ymPlayerSync` mirrors a Yandex Music playlist onto a USB mass-storage
+player with [ym-player-sync](https://github.com/Ortm/ym-player-sync): every
 track is numbered by playlist position (`001-Title - Artist.flac`), files that
 are already on disk under an older name are renamed instead of re-downloaded,
 and the player is mirrored exactly — anything removed from the playlist (or
@@ -114,7 +114,7 @@ cut by `maxTracks` / `maxTotalMb`) is deleted from cache and player.
 
 ```nix
 # machines/<name>/default.nix
-rei.playerConverter = {
+rei.ymPlayerSync = {
   enable = true;
   # playlistUrl defaults to your Liked tracks; the player's mount point:
   playerDir = "/run/media/<user>/<LABEL>/Music";
@@ -122,17 +122,14 @@ rei.playerConverter = {
 ```
 
 The token comes from `secrets/secrets.yaml` (`ym-token`, see above). Sync by
-hand once the player is plugged in — with `rei.playerConverter.schedule =
+hand once the player is plugged in — with `rei.ymPlayerSync.schedule =
 "daily"` a systemd user timer does it instead (it skips while the player is
 absent):
 
 ```sh
-player-converter download     # fetch the playlist into ~/Music/player-converter
-player-converter sync         # mirror the cache onto the player
+ym-player-sync download     # fetch the playlist into ~/Music/ym-player-sync
+ym-player-sync sync         # mirror the cache onto the player
 ```
-
-The flake input points at the repo over SSH because it is private; switch it
-back to `github:Ortm/player_coverter` in `flake.nix` once it is public.
 
 ## Desktop stack (tier 1)
 

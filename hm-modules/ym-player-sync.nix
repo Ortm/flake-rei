@@ -6,10 +6,10 @@
 let
   inherit (lib) mkEnableOption mkIf mkOption types;
 
-  cfg = config.rei.playerConverter;
+  cfg = config.rei.ymPlayerSync;
 in
 {
-  options.rei.playerConverter = {
+  options.rei.ymPlayerSync = {
     enable = mkEnableOption "mirroring a Yandex Music playlist onto the USB player";
 
     playlistUrl = mkOption {
@@ -30,13 +30,13 @@ in
       description = ''
         Where the USB player is mounted (udisks uses
         `/run/media/<user>/<LABEL>`). Point it at the music folder on the
-        player; it must exist when `player-converter sync` runs.
+        player; it must exist when `ym-player-sync sync` runs.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    programs.player-converter = {
+    programs.ym-player-sync = {
       enable = true;
 
       inherit (cfg) playlistUrl playerDir;

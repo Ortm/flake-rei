@@ -16,7 +16,7 @@
   rei.desktopStack.enable = false;
 
   # Yandex Music -> USB player (token comes from secrets/secrets.yaml).
-  rei.playerConverter = {
+  rei.ymPlayerSync = {
     enable = true;
     # Adjust to the label the player gets when plugged in
     # (udisks mounts it at /run/media/<user>/<LABEL>).

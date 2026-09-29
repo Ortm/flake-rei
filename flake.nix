@@ -40,12 +40,10 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # player-converter: mirrors a Yandex Music playlist onto the USB player;
-    # enabled per machine via rei.playerConverter (see hm-modules/).
-    # The repo is private, so it is fetched over SSH; if it ever goes public,
-    # this can go back to the anonymous `github:Ortm/player_coverter`.
-    player-converter.url = "git+ssh://git@github.com/Ortm/player_coverter";
-    player-converter.inputs.nixpkgs.follows = "nixpkgs";
+    # ym-player-sync: mirrors a Yandex Music playlist onto the USB player;
+    # enabled per machine via rei.ymPlayerSync (see hm-modules/).
+    ym-player-sync.url = "github:Ortm/ym-player-sync";
+    ym-player-sync.inputs.nixpkgs.follows = "nixpkgs";
 
     # Yazi plugins. `flake = false` because these repos are plain source
     # trees, not flakes; their files are handed to the yazi module below.
@@ -74,9 +72,9 @@
       pkgs = import nixpkgs {
         localSystem = system;
 
-        # player-converter ships its own package (programs.player-converter
+        # ym-player-sync ships its own package (programs.ym-player-sync
         # picks it up from here); everything else stays stock nixpkgs.
-        overlays = [ inputs.player-converter.overlays.default ];
+        overlays = [ inputs.ym-player-sync.overlays.default ];
 
         # Unfree software is refused unless it is named here. discord is only
         # installed when `rei.desktopSession.sessionApps` is on (tier 2).
@@ -149,8 +147,8 @@
         # Encrypted secrets: sops files under ./secrets, age key outside the repo
         ./hm-modules/security/sops.nix
 
-        # Mirror a Yandex Music playlist onto the USB player (see rei.playerConverter)
-        ./hm-modules/player-converter.nix
+        # Mirror a Yandex Music playlist onto the USB player (see rei.ymPlayerSync)
+        ./hm-modules/ym-player-sync.nix
 
         # Wayland / desktop
         ./hm-modules/wayland/foot.nix # the terminal
@@ -162,7 +160,7 @@
         inputs.hermes-agent.homeManagerModules.default
         inputs.catppuccin.homeModules.catppuccin
         inputs.sops-nix.homeManagerModules.sops
-        inputs.player-converter.homeManagerModules.default
+        inputs.ym-player-sync.homeManagerModules.default
         ./hm-modules/themes/gtk.nix
         ./hm-modules/themes/qt.nix
       ];

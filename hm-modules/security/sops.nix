@@ -16,7 +16,7 @@
     defaultSopsFile = ../../secrets/secrets.yaml;
     defaultSopsFormat = "yaml";
 
-    # Yandex Music OAuth token for player-converter, decrypted to
+    # Yandex Music OAuth token for ym-player-sync, decrypted to
     # ~/.config/sops-nix/secrets/ym-token (0600) at activation time.
     secrets."ym-token" = { };
   };
