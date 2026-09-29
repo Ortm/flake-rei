@@ -190,26 +190,6 @@
         "type": "github"
       }
     },
-    "player-converter": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1790534246,
-        "narHash": "sha256-ER2zOEOkW7iAANpPAfAtTq0LEHFGOeTvq8uafh0U6RM=",
-        "ref": "refs/heads/main",
-        "rev": "3386bba92d149fb4c33349fa287ba1624d236ea5",
-        "revCount": 18,
-        "type": "git",
-        "url": "ssh://git@github.com/Ortm/player_coverter"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/Ortm/player_coverter"
-      }
-    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -268,8 +248,8 @@
         "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs_2",
         "open-with-cmd": "open-with-cmd",
-        "player-converter": "player-converter",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "ym-player-sync": "ym-player-sync"
       }
     },
     "sops-nix": {
@@ -314,6 +294,26 @@
       "original": {
         "owner": "pyproject-nix",
         "repo": "uv2nix",
+        "type": "github"
+      }
+    },
+    "ym-player-sync": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790690602,
+        "narHash": "sha256-6RjX5dN68tXk4OBTNGOD3RcX3ll3xqZcL7dvQEgvpnM=",
+        "owner": "Ortm",
+        "repo": "ym-player-sync",
+        "rev": "947cb1ff99f4ab3ff8a8870708fb8c0487cee7b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Ortm",
+        "repo": "ym-player-sync",
         "type": "github"
       }
     }
