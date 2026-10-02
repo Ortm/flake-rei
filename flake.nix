@@ -6,7 +6,7 @@
   # does three things, in order:
   #
   #   1. inputs  — the sources everything is built from (nixpkgs, home-manager,
-  #                catppuccin, the yazi plugins, hermes)
+  #                catppuccin, nixcord, the yazi plugins, hermes)
   #   2. modules — the files under ./hm-modules that describe the configuration
   #                (./home.nix is the main one; machines/<name>/default.nix
   #                holds whatever is specific to one laptop)
@@ -44,6 +44,12 @@
     # enabled per machine via rei.ymPlayerSync (see hm-modules/).
     ym-player-sync.url = "github:Ortm/ym-player-sync";
     ym-player-sync.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Nixcord: Discord with Vencord, configured from ./home.nix. Its nixpkgs
+    # follows ours; its own `nixpkgs-nixcord` pin stays, because that is what
+    # builds Vencord itself.
+    nixcord.url = "github:4evy/nixcord";
+    nixcord.inputs.nixpkgs.follows = "nixpkgs";
 
     # Yazi plugins. `flake = false` because these repos are plain source
     # trees, not flakes; their files are handed to the yazi module below.
@@ -156,11 +162,14 @@
         ./hm-modules/desktop-stack.nix # tier 1: clipboard, screenshots, OCR, media keys
         ./hm-modules/desktop-session.nix # tier 2: compositor + session helpers
 
-        # Theming
+        # Modules that come from the inputs above
         inputs.hermes-agent.homeManagerModules.default
         inputs.catppuccin.homeModules.catppuccin
         inputs.sops-nix.homeManagerModules.sops
         inputs.ym-player-sync.homeManagerModules.default
+        inputs.nixcord.homeModules.nixcord # Discord + Vencord (programs.nixcord)
+
+        # Theming
         ./hm-modules/themes/gtk.nix
         ./hm-modules/themes/qt.nix
       ];

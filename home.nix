@@ -162,6 +162,25 @@ in
       pdf-engine = "xelatex";
       citeproc = true;
     };
+
+    # Discord with Vencord, installed and configured from Nix (input: nixcord).
+    # Plugin settings live here: what you toggle in the client's plugin menu is
+    # replaced on the next switch. Full option list: https://4evy.github.io/nixcord/
+    nixcord = {
+      enable = true;
+      discord.vencord.enable = true;
+
+      # Build from nixcord's own pinned nixpkgs (nixos-26.05) instead of ours:
+      # the Vencord build needs pnpm 12, which this flake's older nixpkgs pin
+      # does not have yet. Drop this line after `nix flake update nixpkgs`.
+      useGlobalPkgs = false;
+
+      config.plugins = {
+        # hideMedia.enable = true; # hide/blur images and videos until hovered
+        # fakeNitro.enable = true;
+        # volumeBooster.enable = true;
+      };
+    };
   };
 
   # global theaming if enabled
