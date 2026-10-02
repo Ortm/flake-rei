@@ -2,9 +2,13 @@
 {
   home.sessionVariables.FLAKE_MACHINE = "icelake";
 
-  # Identity of this machine's user. Anything left out falls back to the
-  # auto-detected values from hm-modules/user.nix (login name, home directory).
+  # Identity of this machine's user. The login name and home directory are
+  # pinned here as well, so this machine's configuration does not depend on the
+  # environment of whoever runs the switch (a pure evaluation, i.e. one without
+  # --impure, would otherwise fall back to the placeholder user "user").
   rei.user = {
+    username = "vix";
+    homeDirectory = "/home/vix";
     name = "Vix";
     fullName = "Artem";
     email = "aartemchik66@gmail.com";

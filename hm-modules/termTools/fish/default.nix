@@ -50,7 +50,12 @@ in
           md = mkFuncWrap "mkdir" "mkdir -p -- \$argv[1]; and z ./\$argv[1]";
           y = builtins.readFile ./y_function.fish;
           e = "$EDITOR";
-          hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup";
+          # --impure matters: the configuration detects the login name and home
+          # directory from the environment (hm-modules/user.nix). In a pure
+          # evaluation builtins.getEnv returns "" and the switch builds for the
+          # placeholder user "user", failing activation with
+          # `USER is "vix", expected "user"`.
+          hm = "home-manager switch --flake ~/flake-rei/#$FLAKE_MACHINE -b backup --impure";
         }
       ))
 
