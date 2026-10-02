@@ -108,6 +108,12 @@ window-rule {
 }
 
 window-rule {
+    match app-id=r#".*hermes.*"#
+    match app-id=r#".*opencode.*"#
+    open-on-workspace "2"
+}
+
+window-rule {
     match app-id="goofcord"
     match app-id="equibop"
     match app-id="discord"
