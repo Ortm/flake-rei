@@ -17,7 +17,7 @@
     defaultSopsFormat = "yaml";
 
     # Yandex Music OAuth token for ym-player-sync, decrypted to
-    # ~/.config/sops-nix/secrets/ym-token (0600) at activation time.
+    # ~/.config/sops-nix/secrets/ym-token (0400) at activation time.
     secrets."ym-token" = { };
   };
 

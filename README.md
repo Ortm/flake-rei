@@ -88,7 +88,7 @@ autostart and the polkit agent path your distro ships.
 ## Secrets (sops + age)
 
 Encrypted secrets live in `secrets/*.yaml` and are decrypted at activation to
-`~/.config/sops-nix/secrets/<name>` (0600) by `sops-nix`. The age key that can
+`~/.config/sops-nix/secrets/<name>` (0400) by `sops-nix`. The age key that can
 decrypt them is **not** in this repo:
 
 ```sh
@@ -102,6 +102,52 @@ just secrets                                     # edit the file; sops re-encryp
 Losing the age key means the secrets are unrecoverable, so keep a copy off
 the machine. Adding a secret: declare it under `sops.secrets` in
 `hm-modules/security/sops.nix` and add the key to `secrets/secrets.yaml`.
+
+### Several machines
+
+Who can read a secret is decided by the age keys wrapped into each file, so a
+second machine has two options.
+
+**Its own key** (recommended — the private key never leaves the machine that
+made it):
+
+```sh
+# 1. on the new machine, once, before its first switch:
+mkdir -p ~/.config/sops/age
+age-keygen -o ~/.config/sops/age/keys.txt    # prints the public key
+
+# 2. put that public key in .sops.yaml next to the existing one:
+#      keys:
+#        - &vix    age1s0zd…   # icelake
+#        - &laptop age1qxy…    # the new machine
+#      creation_rules:
+#        - path_regex: secrets/.*\.yaml$
+#          key_groups:
+#            - age:
+#                - *vix
+#                - *laptop
+
+# 3. from a machine that can already decrypt, re-wrap the data key:
+sops updatekeys secrets/secrets.yaml
+git commit -am 'secrets: add the laptop as a recipient'
+```
+
+Only the *public* key travels. `sops updatekeys` also works the other way: take
+a machine out of `.sops.yaml`, run it again, and that machine can no longer
+decrypt the file (verified — the values themselves are not re-encrypted, only
+the per-recipient copy of the data key is).
+
+**One key everywhere** (simpler, but one leaked key exposes everything): copy
+`~/.config/sops/age/keys.txt` to the same path on the other machine. The
+recipient in `.sops.yaml` stays as it is.
+
+Secrets that only some machines should see go in their own file rather than
+their own recipient: e.g. `secrets/laptop.yaml`, with a `creation_rules` entry
+listing only the laptop key.
+
+Already have an SSH key? `age` accepts `ssh-ed25519` public keys as recipients
+too — put `ssh-ed25519 AAAA…` in `.sops.yaml` and replace `sops.age.keyFile`
+with `sops.age.sshKeyPaths = [ "…/id_ed25519" ];`.
 
 ## Yandex Music → USB player
 
