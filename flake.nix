@@ -82,8 +82,8 @@
         # picks it up from here); everything else stays stock nixpkgs.
         overlays = [ inputs.ym-player-sync.overlays.default ];
 
-        # Unfree software is refused unless it is named here. discord is only
-        # installed when `rei.desktopSession.sessionApps` is on (tier 2).
+        # Unfree software is refused unless it is named here. discord is the
+        # Vencord-wrapped client that nixcord installs (configured in ./home.nix).
         config = {
           allowUnfree = false;
           allowUnfreePredicate =

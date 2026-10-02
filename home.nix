@@ -164,6 +164,8 @@ in
     };
 
     # Discord with Vencord, installed and configured from Nix (input: nixcord).
+    # This is the only Discord: the distro package can be removed
+    # (`sudo pacman -Rns discord`) and the desktop entry comes from here too.
     # Plugin settings live here: what you toggle in the client's plugin menu is
     # replaced on the next switch. Full option list: https://4evy.github.io/nixcord/
     nixcord = {

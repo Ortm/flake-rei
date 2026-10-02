@@ -11,7 +11,8 @@
 #     manager looks at user data dirs (many do not - see README)
 #   - a polkit authentication agent (polkit-gnome) started with the session
 #   - gnome-keyring + libsecret
-#   - the apps the niri autostart spawns: Telegram and Discord
+#   - Telegram, one of the apps the niri autostart spawns (the other one,
+#     Discord, comes from nixcord - see programs.nixcord in ./home.nix)
 #   - ~/Pictures/Screenshots, where niri's `screenshot-path` writes
 #
 # NOT here, because they need root or the host's session (this is the whole
@@ -83,8 +84,8 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Install the apps `dotfiles/niri/generic/autostart.kdl` spawns:
-        telegram-desktop and discord (discord is unfree - allowed in flake.nix).
+        Install Telegram - the other app `dotfiles/niri/generic/autostart.kdl`
+        spawns is Discord, which comes from nixcord (./home.nix).
       '';
     };
 
@@ -126,7 +127,6 @@ in
       (optional cfg.polkitAgent pkgs.polkit_gnome)
       (optional cfg.keyring pkgs.libsecret)
       (optional cfg.sessionApps pkgs.telegram-desktop)
-      (optional cfg.sessionApps pkgs.discord)
       cfg.extraPackages
     ];
 

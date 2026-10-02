@@ -167,7 +167,7 @@ off by default; a machine turns it on with `rei.desktopSession.enable = true;`.
 | `compositor` | `true` | niri through home-manager's module: `niri`, `niri-session` (start it from a TTY), its systemd user units, `xwayland-satellite` for X11 apps, niri's own D-Bus portal configuration, and a `wayland-sessions/niri.desktop` entry under `~/.local/share` |
 | `polkitAgent` | `true` | polkit-gnome plus a systemd user service that starts its agent with the session, so privilege prompts work without a desktop-specific agent |
 | `keyring` | `true` | GNOME Keyring (+ libsecret); unlocking it at login needs a PAM hook, so without one it asks for the password |
-| `sessionApps` | `true` | `telegram-desktop` and `discord` — the apps `dotfiles/niri/generic/autostart.kdl` spawns |
+| `sessionApps` | `true` | `telegram-desktop` — the other app `dotfiles/niri/generic/autostart.kdl` spawns; Discord comes from nixcord (`home.nix`) |
 | `userDirs` | `true` | XDG user directories, including `~/Pictures/Screenshots` for niri's `screenshot-path` |
 | `extraPackages` | `[ ]` | anything else this session needs |
 
