@@ -283,32 +283,38 @@ in
 
   # Default applications - i.e. which browser opens a link, for anything that
   # goes through xdg-open / the portal (Telegram, Discord, foot, `xdg-open`).
-  # To switch browsers, change `browser` to that browser's desktop-file id -
-  # "firefox.desktop", "zen.desktop", "floorp.desktop", "chromium.desktop"...
-  # (find it with: ls /usr/share/applications | grep -i <name>).
   # home-manager owns ~/.config/mimeapps.list from here on; the first switch
   # moves the hand-written one to ~/.config/mimeapps.list.backup.
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "text/html" = "firefox.desktop";
-      "x-scheme-handler/http" = "firefox.desktop";
-      "x-scheme-handler/https" = "firefox.desktop";
-      "x-scheme-handler/about" = "firefox.desktop";
-      "x-scheme-handler/unknown" = "firefox.desktop";
+  xdg.mimeApps =
+    let
+      # Desktop-file id of the default browser (find one with:
+      # ls /usr/share/applications | grep -i <name>). Change this one line to
+      # switch browsers - "firefox.desktop", "zen.desktop", ...
+      # `glide-browser-bin` is the AUR package name; Glide's window app-id is
+      # glide-glide (already routed to workspace 3 in dotfiles/niri/.../rules.kdl).
+      browser = "glide-browser-bin.desktop";
+    in
+    {
+      enable = true;
+      defaultApplications = {
+        "text/html" = browser;
+        "x-scheme-handler/http" = browser;
+        "x-scheme-handler/https" = browser;
+        "x-scheme-handler/about" = browser;
+        "x-scheme-handler/unknown" = browser;
 
-      # scheme handlers that were set up at runtime before this block existed
-      "x-scheme-handler/ror2mm" = "r2modman.desktop";
-      "x-scheme-handler/hermes" = "hermes.desktop";
-      "x-scheme-handler/clash" = "clash-verge.desktop";
-      "x-scheme-handler/clash-verge" = "clash-verge.desktop";
+        # scheme handlers that were set up at runtime before this block existed
+        "x-scheme-handler/ror2mm" = "r2modman.desktop";
+        "x-scheme-handler/hermes" = "hermes.desktop";
+        "x-scheme-handler/clash" = "clash-verge.desktop";
+        "x-scheme-handler/clash-verge" = "clash-verge.desktop";
+      };
+      associations.added = {
+        "x-scheme-handler/hermes" = "hermes.desktop";
+        "x-scheme-handler/clash" = "clash-verge.desktop";
+        "x-scheme-handler/clash-verge" = "clash-verge.desktop";
+      };
     };
-    associations.added = {
-      "x-scheme-handler/hermes" = "hermes.desktop";
-      "x-scheme-handler/clash" = "clash-verge.desktop";
-      "x-scheme-handler/clash-verge" = "clash-verge.desktop";
-    };
-  };
 
   xdg.configFile."glow/glow.yml".text = ''
     style: "tokyo-night"
