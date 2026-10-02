@@ -267,6 +267,15 @@ in
 
         XDG_CONFIG_HOME = "${config.xdg.configHome}";
         XDG_SCREENSHOTS_DIR = "${config.home.homeDirectory}/Pictures/screenshots";
+
+        # nix's built-in search path points at the old nix-channel directory
+        # (~/.nix-defexpr/channels), which does not exist here, so every nix
+        # call warned about it. That value comes from home-manager's
+        # targets.genericLinux (below), which prepends the channel dir for
+        # legacy `nix-channel` users. Flakes do not need a search path at all;
+        # pointing it at the flake registry keeps `<nixpkgs>` working for
+        # `nix-shell -p` without the warning.
+        NIX_PATH = "nixpkgs=flake:nixpkgs";
       };
 
     sessionPath = [
@@ -346,6 +355,13 @@ in
   # Non-NixOS only: this wires up the driver / GL paths a store binary needs on
   # a foreign distro (see README, "Any Linux distro"). Set it to false on NixOS.
   targets.genericLinux.enable = true;
+
+  # Same NIX_PATH as above, but for the systemd user environment - this is the
+  # one targets.genericLinux sets (it prepends the missing ~/.nix-defexpr/
+  # channels), so it needs mkForce to win. Without it, services and anything not
+  # started from a shell keep the stale value and log the warning. Read at the
+  # next login.
+  systemd.user.sessionVariables.NIX_PATH = mkForce "nixpkgs=flake:nixpkgs";
 
   news.display = "silent";
 }
