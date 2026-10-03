@@ -135,6 +135,7 @@
       baseModules = [
         ./home.nix # the main file: programs, packages, session settings
 
+        ./hm-modules/sound/mpd.nix # music player daemon (rmpc's server)
         ./hm-modules/sound/mpv.nix
         ./hm-modules/sound/rmpc/default.nix # MPD client (TUI)
 
