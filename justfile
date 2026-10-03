@@ -17,10 +17,6 @@ hm:
 secrets:
     sops secrets/secrets.yaml
 
-# Install / refresh the greetd login screen (niri + gtkgreet); needs sudo
-login:
-    sudo ./scripts/setup_login.sh
-
 # Generate blurred versions of wallpapers in each directory (parallel processing)
 blur-wallpapers:
     #!/usr/bin/env bash

@@ -149,38 +149,6 @@ Already have an SSH key? `age` accepts `ssh-ed25519` public keys as recipients
 too — put `ssh-ed25519 AAAA…` in `.sops.yaml` and replace `sops.age.keyFile`
 with `sops.age.sshKeyPaths = [ "…/id_ed25519" ];`.
 
-## Login screen (greetd)
-
-The login screen is greetd running a small niri session as the `greeter` user:
-swaybg paints a wallpaper, gtkgreet draws the login card on top of it
-(layer-shell). Everything it shows — stylesheet, wallpaper, the niri config for
-that session — is built from this repo, so it is versioned and changes with the
-flake.
-
-```sh
-just login            # or: sudo ./scripts/setup_login.sh
-```
-
-The script installs `greetd`, `greetd-gtkgreet` and `swaybg` (pacman), builds
-`.#loginBundle` and publishes it at `/nix/var/nix/gcroots/rei-login` (a GC root,
-so it survives `nix-collect-garbage`), writes `/etc/greetd/config.toml`, and
-swaps the enabled display manager over to greetd. Reboot to see it.
-
-Why a script and not home-manager: the greeter runs *before* anyone logs in, as
-another user, and `/home/<user>` is mode 0700 — it cannot read anything from
-your home. The bundle therefore lives in the store (world-readable), and only
-`/etc/greetd/config.toml` itself is root-owned.
-
-- Style: `login/greeter.css` (gtkgreet CSS, catppuccin mocha).
-- Wallpaper: the `wallpaper = ...` line in `login/default.nix`.
-- Greeter session: generated in `login/default.nix` — swaybg plus gtkgreet, and
-  niri exits as soon as gtkgreet does, which is what hands over to the real
-  session.
-
-After editing any of those, run `just login` again (no reboot needed to pick up
-a new stylesheet). If the greeter fails to come up: `Ctrl+Alt+F2`, log in, and
-run `sudo systemctl disable --now greetd && sudo systemctl enable --now sddm`.
-
 ## Yandex Music → USB player
 
 `rei.ymPlayerSync` mirrors a Yandex Music playlist onto a USB mass-storage
