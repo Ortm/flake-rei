@@ -4,7 +4,8 @@
 #
 # The library is ~/Music, which is also where `ym-player-sync download` stages
 # the Yandex Music playlist (~/Music/ym-player-sync), so music shows up in rmpc
-# as soon as it lands there — the USB player is a copy of the same files.
+# as soon as it lands there — the USB player is a copy of the same files. The
+# SSD's collection is linked into the same directory (hm-modules/music-library.nix).
 { config, ... }:
 {
   services.mpd = {

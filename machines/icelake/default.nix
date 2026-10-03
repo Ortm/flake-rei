@@ -22,8 +22,9 @@
   # Yandex Music -> USB player (token comes from secrets/secrets.yaml).
   rei.ymPlayerSync = {
     enable = true;
-    # Adjust to the label the player gets when plugged in
-    # (udisks mounts it at /run/media/<user>/<LABEL>).
-    playerDir = "/run/media/vix/PLAYER/Music";
+    # The ECHO MINI player: its volume label is "ECHO MINI", so udisks mounts it
+    # at /run/media/<user>/<LABEL> under that name (space included). The "Music"
+    # folder has to exist on the player — the sync service only runs while it does.
+    playerDir = "/run/media/vix/ECHO MINI/Music";
   };
 }

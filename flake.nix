@@ -138,6 +138,7 @@
         ./hm-modules/sound/mpd.nix # music player daemon (rmpc's server)
         ./hm-modules/sound/mpv.nix
         ./hm-modules/sound/rmpc/default.nix # MPD client (TUI)
+        ./hm-modules/music-library.nix # ~/Music layout: the SSD's music linked in
 
         # CLI/TUI tools
         ./hm-modules/termTools/yazi
