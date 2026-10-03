@@ -158,6 +158,9 @@
         # Mirror a Yandex Music playlist onto the USB player (see rei.ymPlayerSync)
         ./hm-modules/ym-player-sync.nix
 
+        # Auto-mount removable drives (external SSD, USB player, flash drives)
+        ./hm-modules/automount.nix
+
         # Wayland / desktop
         ./hm-modules/wayland/foot.nix # the terminal
         ./hm-modules/wayland/niri-assets.nix # files the niri config spawns
