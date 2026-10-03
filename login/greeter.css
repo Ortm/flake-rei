@@ -1,0 +1,57 @@
+/* Login screen styling for gtkgreet (catppuccin mocha over the wallpaper).
+ *
+ * gtkgreet is a GTK3 app, so this is plain GTK CSS. It is passed to gtkgreet
+ * with -s by the niri greeter config (see login/default.nix). Edit, then
+ * re-run `sudo ./scripts/setup_login.sh` — no reboot needed to pick it up.
+ *
+ * The window itself stays transparent: the wallpaper is drawn by swaybg
+ * underneath, and only this card is visible on top of it.
+ */
+window {
+  background-color: transparent;
+}
+
+box#body {
+  background-color: rgba(30, 30, 46, 0.82);
+  border: 1px solid rgba(205, 214, 244, 0.12);
+  border-radius: 16px;
+  padding: 32px 40px;
+  min-width: 300px;
+}
+
+label {
+  color: #cdd6f4;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+entry {
+  background-color: #313244;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  caret-color: #89b4fa;
+}
+
+combobox button {
+  background-color: #313244;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 8px;
+}
+
+button {
+  background-color: #89b4fa;
+  color: #1e1e2e;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #b4befe;
+}

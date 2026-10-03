@@ -180,8 +180,16 @@
       machineDir = ./machines;
       isMachineDir = name: type: type == "directory" && builtins.pathExists (machineDir + "/${name}/default.nix");
       machineNames = builtins.attrNames (lib.filterAttrs isMachineDir (builtins.readDir machineDir));
+
+      # ── the login screen ──────────────────────────────────────────────────
+      # greetd + niri + gtkgreet, built here and installed by
+      # ./scripts/setup_login.sh. See README, "Login screen".
+      loginBundle = import ./login { inherit pkgs; };
     in
     {
+      # `nix build .#loginBundle`
+      packages.${system} = { inherit loginBundle; };
+
       # `home-manager switch --flake .#icelake` builds this attribute.
       homeConfigurations = lib.genAttrs machineNames (
         machine:
