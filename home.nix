@@ -166,8 +166,9 @@ in
     # Discord with Vencord, installed and configured from Nix (input: nixcord).
     # This is the only Discord: the distro package can be removed
     # (`sudo pacman -Rns discord`) and the desktop entry comes from here too.
-    # Plugin settings live here: what you toggle in the client's plugin menu is
-    # replaced on the next switch. Full option list: https://4evy.github.io/nixcord/
+    # Plugin list + settings live in ./hm-modules/vencord-config.nix, captured
+    # from the client on 2026-10-03; toggling plugins in the client itself is
+    # overwritten on the next switch. Full option list: https://4evy.github.io/nixcord/
     nixcord = {
       enable = true;
       discord.vencord.enable = true;
@@ -177,11 +178,7 @@ in
       # does not have yet. Drop this line after `nix flake update nixpkgs`.
       useGlobalPkgs = false;
 
-      config.plugins = {
-        # hideMedia.enable = true; # hide/blur images and videos until hovered
-        # fakeNitro.enable = true;
-        # volumeBooster.enable = true;
-      };
+      config = import ./hm-modules/vencord-config.nix;
     };
   };
 
