@@ -1,0 +1,89 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+// Catppuccin Mocha for rmpc — the built-in theme with mocha colours.
+// Only the parts that differ are here; the layout and the header/footer
+// components come from rmpc's defaults (see `rmpc theme` for the full file).
+(
+    default_album_art_path: None,
+    format_tag_separator: " | ",
+    browser_column_widths: [20, 38, 42],
+
+    background_color: "#1e1e2e",        // base
+    text_color: "#cdd6f4",              // text
+    header_background_color: "#181825", // mantle
+    modal_background_color: "#313244",  // surface0
+    modal_backdrop: false,
+
+    preview_label_style: (fg: "#fab387"),                             // peach
+    preview_metadata_group_style: (fg: "#f9e2af", modifiers: "Bold"), // yellow
+    highlighted_item_style: (fg: "#89b4fa", modifiers: "Bold"),       // blue
+    current_item_style: (fg: "#1e1e2e", bg: "#89b4fa", modifiers: "Bold"),
+    borders_style: (fg: "#585b70"),                                   // surface2
+    highlight_border_style: (fg: "#89b4fa"),                          // blue
+
+    symbols: (
+        song: "",
+        dir: "",
+        playlist: "",
+        marker: "",
+        ellipsis: "…",
+        song_style: (fg: "#89b4fa"),     // blue
+        dir_style: (fg: "#f9e2af"),      // yellow
+        playlist_style: (fg: "#cba6f7"), // mauve
+    ),
+
+    level_styles: (
+        info: (fg: "#89b4fa", bg: "#1e1e2e"),  // blue
+        warn: (fg: "#f9e2af", bg: "#1e1e2e"),  // yellow
+        error: (fg: "#f38ba8", bg: "#1e1e2e"), // red
+        debug: (fg: "#a6e3a1", bg: "#1e1e2e"), // green
+        trace: (fg: "#cba6f7", bg: "#1e1e2e"), // mauve
+    ),
+
+    progress_bar: (
+        symbols: ["█", "█", "█", " ", "█"],
+        track_style: (fg: "#585b70"),  // surface2
+        elapsed_style: (fg: "#89b4fa"), // blue
+        thumb_style: (fg: "#b4befe"),   // lavender
+        use_track_when_empty: true,
+    ),
+    scrollbar: (
+        symbols: ["│", "█", "▲", "▼"],
+        track_style: (),
+        ends_style: (),
+        thumb_style: (fg: "#89b4fa"), // blue
+    ),
+    tab_bar: (
+        active_style: (fg: "#1e1e2e", bg: "#89b4fa", modifiers: "Bold"),
+        inactive_style: (),
+    ),
+
+    lyrics: (timestamp: false),
+
+    song_table_format: [
+        (
+            prop: (kind: Property(Artist), default: (kind: Text("Unknown"))),
+            label_prop: (kind: Text("Artist")),
+            width: "20%",
+        ),
+        (
+            prop: (kind: Property(Title), default: (kind: Text("Unknown"))),
+            label_prop: (kind: Text("Title")),
+            width: "35%",
+        ),
+        (
+            prop: (kind: Property(Album), style: (fg: "#a6adc8"), // subtext0
+                default: (kind: Text("Unknown Album"), style: (fg: "#a6adc8"))
+            ),
+            label_prop: (kind: Text("Album")),
+            width: "30%",
+        ),
+        (
+            prop: (kind: Property(Duration), default: (kind: Text("-"))),
+            label_prop: (kind: Text("Duration")),
+            width: "15%",
+            alignment: Right,
+        ),
+    ],
+)

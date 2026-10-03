@@ -136,6 +136,7 @@
         ./home.nix # the main file: programs, packages, session settings
 
         ./hm-modules/sound/mpv.nix
+        ./hm-modules/sound/rmpc/default.nix # MPD client (TUI)
 
         # CLI/TUI tools
         ./hm-modules/termTools/yazi

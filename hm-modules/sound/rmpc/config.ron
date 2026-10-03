@@ -1,0 +1,31 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+// rmpc configuration. Anything not listed here keeps rmpc's built-in default
+// (`rmpc config` prints the complete annotated default file).
+(
+    // Where mpd listens. Default: a local mpd on port 6600.
+    address: "127.0.0.1:6600",
+    password: None,
+
+    // ~/.config/rmpc/themes/catppuccin-mocha.ron, shipped next to this file.
+    theme: "catppuccin-mocha",
+
+    volume_step: 5,
+    max_fps: 60,
+    enable_mouse: true,
+    enable_config_hot_reload: true,
+    status_update_interval_ms: 500,
+    keep_state_on_song_change: true,
+
+    browser_song_sort: [Disc, Track, Artist, Title],
+    directories_sort: SortFormat(group_by_type: true, reverse: false),
+
+    album_art: (
+        method: Auto,
+        max_size_px: (width: 1200, height: 1200),
+        disabled_protocols: ["http://", "https://"],
+        vertical_align: Center,
+        horizontal_align: Center,
+    ),
+)
