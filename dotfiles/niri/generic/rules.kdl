@@ -130,6 +130,7 @@ window-rule {
     match app-id="blueberry.py"
     match app-id="org.pulseaudio.pavucontrol"
     match app-id="com.mitchellh.ghostty"
+    match app-id=r#".*stremio.*"#
     open-on-workspace "6"
 }
 

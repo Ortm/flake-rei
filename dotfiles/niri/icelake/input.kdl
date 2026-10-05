@@ -8,11 +8,22 @@ input {
         }
     }
     touchpad {
-        dwt
         tap
+        dwt
+        dwtp
+
+        drag true
+        drag-lock
+        click-method "clickfinger"
         tap-button-map "left-right-middle"
+
+        natural-scroll
         accel-speed 0
-        accel-profile "adaptive"
+        accel-profile "flat"
+        
+        scroll-factor 1.0
         scroll-method "two-finger"
+        
+        disabled-on-external-mouse
     }
 }
