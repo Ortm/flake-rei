@@ -172,6 +172,8 @@ in
     nixcord = {
       enable = true;
       discord.vencord.enable = true;
+      # Krisp noise suppression (the native module Discord's voice chat uses).
+      discord.krisp.enable = true;
 
       # Build from nixcord's own pinned nixpkgs (nixos-26.05) instead of ours:
       # the Vencord build needs pnpm 12, which this flake's older nixpkgs pin
