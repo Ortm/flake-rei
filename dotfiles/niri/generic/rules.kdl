@@ -131,7 +131,9 @@ window-rule {
     match app-id="org.pulseaudio.pavucontrol"
     match app-id="com.mitchellh.ghostty"
     match app-id=r#".*stremio.*"#
+    open-focused true
     open-on-workspace "6"
+    default-column-width { proportion 1.0; }
 }
 
 window-rule {
