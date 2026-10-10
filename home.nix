@@ -345,6 +345,65 @@ in
       };
     };
 
+  # Glide's AUR desktop file has Exec=/usr/bin/"glide-bin" %u - the literal
+  # quotes trip xdg-mime's Exec parser (desktop_file_to_binary), so xdg-mime
+  # (and everything on top of it: xdg-open, some messengers) silently fell
+  # back to firefox.desktop. This re-declares the same file id with a clean
+  # Exec; home-manager installs it ahead of /usr/share in XDG_DATA_DIRS, so
+  # gio, xdg-mime, xdg-open and the portals all agree on Glide.
+  xdg.desktopEntries.glide-browser-bin = {
+    name = "Glide Browser";
+    comment = "An extensible and keyboard-focused web browser built on Firefox";
+    exec = "/usr/bin/glide-bin %u";
+    icon = "glide-bin";
+    terminal = false;
+    categories = [ "Network" "WebBrowser" ];
+    mimeType = [
+      "application/json"
+      "application/pdf"
+      "application/rdf+xml"
+      "application/rss+xml"
+      "application/x-xpinstall"
+      "application/xhtml+xml"
+      "application/xml"
+      "audio/flac"
+      "audio/ogg"
+      "audio/webm"
+      "image/avif"
+      "image/gif"
+      "image/jpeg"
+      "image/png"
+      "image/svg+xml"
+      "image/webp"
+      "text/html"
+      "text/xml"
+      "video/ogg"
+      "video/webm"
+      "x-scheme-handler/chrome"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+      "x-scheme-handler/mailto"
+    ];
+    settings = {
+      StartupWMClass = "glide-glide";
+      "X-GNOME-FullName" = "Glide Browser";
+    };
+    actions = {
+      new-window = {
+        name = "New Window";
+        exec = "/usr/bin/glide-bin --new-window %u";
+      };
+      new-private-window = {
+        name = "New Private Window";
+        exec = "/usr/bin/glide-bin --private-window %u";
+      };
+      open-profile-manager = {
+        name = "Open Profile Manager";
+        exec = "/usr/bin/glide-bin --ProfileManager";
+      };
+    };
+  };
+
   xdg.configFile."glow/glow.yml".text = ''
     style: "tokyo-night"
     width: 0
