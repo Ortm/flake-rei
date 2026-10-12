@@ -86,6 +86,19 @@ in
         listToAttrs (lib.mapAttrsToList mkFunc { n = mkFuncWrap "nvim" "${pkgs.neovim}/bin/nvim"; })
       ))
 
+      (lib.mkIf config.programs.rmpc.enable (
+        listToAttrs (
+          lib.mapAttrsToList mkFunc {
+            # mpd scans its library only at startup and never notices a mount
+            # appearing under ~/Music, so a boot where the SSD mounts late
+            # leaves the SSD tracks out of the database. Re-syncing on launch
+            # means rmpc is current whenever it is opened; the scan runs in the
+            # background while the TUI comes up.
+            rmpc = mkFuncWrap "rmpc" "command rmpc update; command rmpc $argv";
+          }
+        )
+      ))
+
       # Dots: ".. == cd ../", "... == cd ../../", ...
       (listToAttrs (
         map (
