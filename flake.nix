@@ -138,7 +138,6 @@
         ./hm-modules/sound/mpd.nix # music player daemon (rmpc's server)
         ./hm-modules/sound/mpv.nix
         ./hm-modules/sound/rmpc/default.nix # MPD client (TUI)
-        ./hm-modules/music-library.nix # ~/Music layout: the SSD's music linked in
 
         # CLI/TUI tools
         ./hm-modules/termTools/yazi
@@ -159,7 +158,7 @@
         # Mirror a Yandex Music playlist onto the USB player (see rei.ymPlayerSync)
         ./hm-modules/ym-player-sync.nix
 
-        # Auto-mount removable drives (external SSD, USB player, flash drives)
+        # Auto-mount removable drives (USB player, flash drives)
         ./hm-modules/automount.nix
 
         # Wayland / desktop

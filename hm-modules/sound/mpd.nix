@@ -4,12 +4,8 @@
 #
 # The library is ~/Music, which is also where `ym-player-sync download` stages
 # the Yandex Music playlist (~/Music/ym-player-sync), so music shows up in rmpc
-# as soon as it lands there — the USB player is a copy of the same files. The
-# SSD's collection is linked into the same directory (hm-modules/music-library.nix).
-# rmpc re-syncs the library on every launch (the `rmpc` wrapper in
-# hm-modules/termTools/fish), which also covers the boot race where the SSD
-# mounts after mpd has already scanned.
-{ config, ... }:
+# as soon as it lands there — the USB player is a copy of the same files.
+{ config, lib, ... }:
 {
   services.mpd = {
     enable = true;
@@ -28,4 +24,12 @@
       restore_paused "yes"
     '';
   };
+
+  # ~/Music is the library root — mpd indexes it, `ym-player-sync download`
+  # stages files inside it. Home Manager only creates it as a side effect of
+  # managing something under it, so create it on every activation (mkdir -p
+  # is a no-op when it already exists).
+  home.activation.createMusicDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run mkdir -p "$HOME/Music"
+  '';
 }
