@@ -24,16 +24,14 @@
   # mounted by /etc/fstab at /mnt/player (PARTUUID 0049c3bc-01); sync mirrors
   # into its `favourite` folder, which has to exist on the player — a missing
   # folder or an unplugged player fails loudly, never a silent partial sync.
-  # quality, tags and outputDir keep the module defaults (lossless, tags on,
-  # cache in ~/Music/ym-player-sync).
+  # quality, tags, outputDir and filenameTemplate keep the module defaults
+  # (lossless, tags on, cache in ~/Music/ym-player-sync, names numbered by
+  # `{width}` — 0001-style at this playlist size, so >999 still sorts right).
   rei.ymPlayerSync = {
     enable = true;
     playerDir = "/mnt/player/favourite";
     embedCover = false;
     maxTotalMb = 6000;
     workers = 8;
-    # 001, 002, … — a literal width on purpose (the default `{width}` widens
-    # to 0001 by itself once the playlist passes 999 tracks)
-    filenameTemplate = "{position:03d}-{title} - {artists}.{ext}";
   };
 }
