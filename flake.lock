@@ -144,6 +144,27 @@
         "type": "github"
       }
     },
+    "home-manager_4": {
+      "inputs": {
+        "nixpkgs": [
+          "ym-player-sync",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792000010,
+        "narHash": "sha256-4jtkwQlReQdXsKJJfB9yT7nIf0TlwgZOk2XtxjUgDS8=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "5a9d300bd619c03857521b50c8877a19dbad7078",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -422,16 +443,17 @@
     },
     "ym-player-sync": {
       "inputs": {
+        "home-manager": "home-manager_4",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1790690602,
-        "narHash": "sha256-6RjX5dN68tXk4OBTNGOD3RcX3ll3xqZcL7dvQEgvpnM=",
+        "lastModified": 1792074917,
+        "narHash": "sha256-Jgyg0sjgRHx8kmFE3XQ4rzIGYF3+UtELh3V1j0nj/Nk=",
         "owner": "Ortm",
         "repo": "ym-player-sync",
-        "rev": "947cb1ff99f4ab3ff8a8870708fb8c0487cee7b0",
+        "rev": "c2c15eeda7e125dd78e9e5d2127e9e9edb5bc7b8",
         "type": "github"
       },
       "original": {
