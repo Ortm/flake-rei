@@ -12,6 +12,15 @@ config, theming and the niri compositor config (`dotfiles/niri`, symlinked into
 | Nix | with flakes enabled — install with the [Determinate installer](https://install.determinate.systems/nix) or your distro's package |
 | Desktop stack | tier 1 (`wofi`, `cliphist`, `wl-clipboard`, `playerctl`, `grim`, `slurp`, `imagemagick`, `brightnessctl`, `noctalia`, `easyocr`) comes from the flake and, with `rei.desktopSession.enable` (tier 2), so do niri itself, the D-Bus portals, a polkit agent, the keyring and the session apps — see [Desktop stack](#desktop-stack-tier-1) and [Tier 2](#tier-2--the-session-itself). Left to the distro: drivers, logind/udev, PAM and the display manager. |
 
+Removable drives are mounted by the system's `udisks2` (through the flake's
+`udiskie`) at `/run/media/<user>/<LABEL>` — udisks2's fixed location — and
+every disk is also mirrored to `/mnt/<name>` as a symlink (created on mount,
+removed on unplug). The mirror needs `/mnt` to be writable by your user once:
+
+```sh
+sudo chown $USER /mnt
+```
+
 ## Install
 
 ```sh

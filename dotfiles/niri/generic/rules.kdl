@@ -125,6 +125,11 @@ window-rule {
 }
 
 window-rule {
+    match title="Media viewer"
+    open-focused true
+}
+
+window-rule {
     match app-id="com.github.wwmm.easyeffects"
     match app-id="Vial"
     match app-id="blueberry.py"
