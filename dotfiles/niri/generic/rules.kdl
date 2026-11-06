@@ -94,6 +94,7 @@ window-rule {
     match app-id=r#"(?i)minecraft"#
     match app-id=r#"(?i)HytaleClient"#
     match app-id="Antigravity"
+    match app-id="heroic"
     open-on-workspace "1"
 }
 
