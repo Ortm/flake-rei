@@ -1,7 +1,8 @@
 binds {
     Mod+Return { spawn "foot"; }
     Mod+SPACE { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+X { spawn-sh "$HOME/.local/bin/rei-ocr"; } // TODO: поставить модельку попизже
+    // Mod+X { spawn-sh "$HOME/.local/bin/rei-ocr"; } // TODO: поставить модельку попизже
+    Mod+O { spawn "normcap"; }
     Super+T { toggle-window-floating; }
     
     Mod+Q { close-window; }

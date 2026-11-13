@@ -217,6 +217,8 @@ in
         duckdb
         libqalculate
         tldr
+        normcap
+        wl-clipboard
 
         # fancy
         gum
@@ -357,7 +359,10 @@ in
     exec = "/usr/bin/glide-bin %u";
     icon = "glide-bin";
     terminal = false;
-    categories = [ "Network" "WebBrowser" ];
+    categories = [
+      "Network"
+      "WebBrowser"
+    ];
     mimeType = [
       "application/json"
       "application/pdf"

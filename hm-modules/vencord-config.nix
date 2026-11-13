@@ -536,7 +536,7 @@
       bgOpacity = 100.0;
       customTheme = null;
       theme = "https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/dark-plus.json";
-      tryHljs = "SECONDARY";
+      tryDiscordHighlighter = "SECONDARY";
       useDevIcon = "GREYSCALE";
     };
     showAllMessageButtons.enable = false;
