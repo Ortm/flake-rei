@@ -25,6 +25,43 @@ let
   }
   // optionalAttrs (email != "") { inherit email; };
 
+  ocrScript = pkgs.writeShellApplication {
+    name = "screenshot-ocr";
+    runtimeInputs = with pkgs; [
+      grim
+      slurp
+      imagemagick
+      wl-clipboard
+      libnotify
+      (tesseract.override {
+        enableLanguages = [
+          "eng"
+          "rus"
+        ];
+      })
+    ];
+    text = ''
+      # Select region; exit cleanly if cancelled (Esc)
+      GEOM=$(slurp 2>/dev/null) || exit 0
+      [ -z "$GEOM" ] && exit 0
+
+      # Capture region, upscale & normalize contrast via ImageMagick, then OCR
+      TEXT=$(
+        grim -g "$GEOM" - \
+          | magick - -resize 200% -colorspace Gray -normalize png:- \
+          | tesseract stdin stdout -l eng+rus --psm 6 2>/dev/null \
+          | sed '/^[[:space:]]*$/d'
+      )
+
+      if [ -n "$TEXT" ]; then
+        printf "%s" "$TEXT" | wl-copy
+        notify-send "OCR Copied" "$TEXT"
+      else
+        notify-send "OCR Failed" "No readable text detected in selection."
+      fi
+    '';
+  };
+
 in
 {
   nix = {
@@ -217,8 +254,7 @@ in
         duckdb
         libqalculate
         tldr
-        normcap
-        wl-clipboard
+        ocrScript
 
         # fancy
         gum
